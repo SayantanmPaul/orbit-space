@@ -4,7 +4,7 @@ import Videoplayer from "@/components/videoplayer";
 
 export default function Page() {
   return (
-    <div className="w-full h-screenoverflow-hidden">
+    <div className="w-full h-screen overflow-hidden relative">
       <Videoplayer />
     </div>
   )
