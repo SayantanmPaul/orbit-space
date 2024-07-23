@@ -1,21 +1,27 @@
-// @ts-ignore
-import React from 'react'
-import '/app/globals.css'
+import '/app/globals.css';
 
-const Videoplayer = () => {
-    return (
-        <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
-            <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className='lg:w-full w-auto h-screen object-cover'
-            >
-                <source src='/lofi/lofi-boy-chilling-with-cat-moewalls-com.mp4' />
-            </video>
-        </div>
-    )
+const Videoplayer = ({
+  source,
+  className
+}: {
+  source: string,
+  className?: string
+}) => {
+
+  return (
+    <>
+      <video
+        key={source}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className={`lg:w-full w-auto h-screen object-cover transition-transform  duration-500 ease-in-out ${className}`}
+      >
+        <source src={source} />
+      </video>
+    </>
+  );
 }
 
-export default Videoplayer
+export default Videoplayer;
