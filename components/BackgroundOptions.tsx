@@ -1,7 +1,8 @@
 
 import { useAppStore } from "@/(store)/App";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ArrowUpFromLine, Orbit } from "lucide-react";
+import { ArrowUpFromLine } from "lucide-react";
+import Image from "next/image";
 import { Button } from "./ui/button";
 
 const localVideoSource = [
@@ -14,7 +15,6 @@ export function WallpaperSelection() {
   const setSource = useAppStore(state => state.setSource)
   const source = useAppStore(state => state.source)
 
-  // console.log(source)
   const handleClick = (source: string) => {
     setSource(source);
   }
@@ -36,11 +36,18 @@ export function WallpaperSelection() {
               <source src={video} />
             </video>
             {video === source &&
-              <div className="bg-gradient-to-b from-black/70 to-transparent h-24 w-full overflow-hidden absolute top-0">
+              <div className="bg-gradient-to-b from-black/70 to-transparent h-32 w-full overflow-hidden absolute top-0">
               </div>
             }
             {video === source &&
-              <Orbit absoluteStrokeWidth className="absolute top-3 right-3 shadow-2xl text-yellow-300 w-5 h-5" />
+              // <Orbit absoluteStrokeWidth className="absolute top-3 right-3 shadow-2xl text-yellow-300 w-5 h-5" />
+              <Image
+                src={'/galaxy.gif'}
+                alt="galaxy"
+                width={100}
+                height={100}
+                className="absolute top-3 right-3 w-8 h-8"
+              />
             }
           </div>
         ))}
@@ -53,3 +60,5 @@ export function WallpaperSelection() {
     </ScrollArea>
   );
 }
+
+

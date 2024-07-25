@@ -3,14 +3,22 @@ import { useAppStore } from "@/(store)/App";
 import FullScreenView from "@/components/FullScreenView";
 import SettingsJSX from "@/components/settings";
 import Videoplayer from "@/components/videoplayer";
+import { useEffect } from "react";
 // import Image from "next/image";
 
 export default function Page() {
-  const source = useAppStore(state => state.source)
   const setSource = useAppStore(state => state.setSource)
 
-  console.log(source);
+  useEffect(() => {
+    //check for cookies exist
+    const isFirstVisit = !localStorage.getItem('sourceSet');
+    if (isFirstVisit) {
+      setSource('/lofi/lofi-boy-chilling-with-cat-moewalls-com.mp4');
+      localStorage.setItem('sourceSet', 'true');
+    }
+  }, [setSource]);
 
+  const source = useAppStore(state => state.source)
   return (
     <div className="w-full h-full overflow-hidden relative" id="container">
       <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
