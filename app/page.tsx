@@ -6,8 +6,9 @@ import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX, { SpotifyLoginCardSkeleton } from "@/components/SpotifyLogin";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
-import { getServerSession } from "next-auth";
+import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useCallback, useEffect } from "react";
 import { toast } from "sonner"
 
@@ -37,31 +38,46 @@ export default function Page() {
         name: session.user?.name || '',
         email: session.user?.email || ''
       });
-      if (user.name) {
-        toast.success(`Hi ${user.name}, you're logged in successfully`)
-      }
     }
   }, [status, session, setUser]);
 
-  return (
-    <div className="w-full h-full overflow-hidden relative" id="container">
-      <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
-        <Videoplayer source={source} />
+  const LoaderScreenJSX = () => {
+    return (
+      <div className="w-full h-screen flex items-center justify-center dark ">
+        <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
+            <Image
+              src={'/meteorite.gif'}
+              width={500}
+              height={500}
+              alt="loading"
+              className="w-24 h-24 object-cover "
+            />
+            <div className="flex flex-row gap-2 items-center">
+              <p className="text-lg font-semibold font-base ">Loading up your space</p>
+              <Loader strokeWidth={3} className="animate-spin w-5 h-5" />
+            </div>
+          </span>
+        </div>
       </div>
-      <span className="hidden lg:block md:block">
-        <FullScreenView />
-      </span>
-      {status === 'loading' &&
-        <span className="absolute bottom-4 left-4">
-          <SpotifyLoginCardSkeleton />
+    )
+  }
+
+  const ContainerViewJSX = () => {
+    return (
+      <div className="w-full h-full overflow-hidden relative" id="container">
+        <div className='overflow-hidden w-full h-[100vh] object-cover relative ' id='container'>
+          <Videoplayer source={source} />
+        </div>
+        <span className="hidden lg:block md:block">
+          <FullScreenView />
         </span>
-      }
-      {status === 'unauthenticated' &&
-        <span className="absolute bottom-4 left-4">
-          <SpotifyLoginJSX />
-        </span>
-      }
-      {status === 'authenticated' &&
+        {status === 'unauthenticated' &&
+          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-min">
+            <SpotifyLoginJSX />
+          </span>
+        }
+        {status === 'authenticated' &&
           <>
             <span className="absolute bottom-4 left-4">
               <UserProfileJSX />
@@ -70,13 +86,25 @@ export default function Page() {
               <SettingsJSX />
             </span>
           </>
-        
-      }
 
-      <span className="">
-        {/* handleClickOutSide */}
-        <SpotifyEmbeadJSX disabled={user.email ? false : true} />
-      </span>
+        }
+
+        <span className={!user.name ? 'hidden lg:block' : 'block'}>
+          {/* handleClickOutSide */}
+          <SpotifyEmbeadJSX disabled={user.name ? false : true} />
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="w-full h-full overflow-hidden relative ">
+      <div className={` transition-opacity duration-1000 ${status==="loading" ? "opacity-100" : "opacity-0"}`}>
+        {status=== 'loading' && <LoaderScreenJSX />}
+      </div>
+      <div className={` transition-opacity duration-1000 ${status==='loading' ? "opacity-0" : "opacity-100"}`}>
+        <ContainerViewJSX />
+      </div>
     </div>
   )
 }
