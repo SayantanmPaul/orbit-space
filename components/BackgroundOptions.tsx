@@ -19,8 +19,8 @@ export function WallpaperSelection() {
     setSource(source);
   }
   return (
-    <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-md bg-black/50 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
-      <div className="flex flex-col w-max gap-4 p-4 items-center relative">
+    <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-md bg-black/40 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
+      <div className="flex flex-col w-max gap-4 p-4 items-center relative ">
         {localVideoSource.map((video, i) => (
           <div
             onClick={() => handleClick(video)}

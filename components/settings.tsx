@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { WallpaperSelection } from './BackgroundOptions'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
+import classNames from 'classnames'
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -22,6 +23,10 @@ const SettingsJSX = () => {
       document.removeEventListener('mousedown', handleClickOutSide);
     };
   }, []);
+
+  const animationClass = classNames({
+    "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2": true
+  })
 
   return (
     <div ref={stateRef}>
@@ -52,7 +57,7 @@ const SettingsJSX = () => {
                   />
                 </ToggleGroupItem>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className={animationClass}>
                 <WallpaperSelection />
               </PopoverContent>
             </Popover>
@@ -71,10 +76,9 @@ const SettingsJSX = () => {
           </>
         }
       </ToggleGroup>
-      {/* <Toggle variant="outline" aria-label="Toggle italic" className='group bg-black/20 hover:bg-black/30 backdrop-blur-lg rounded-lg'>
-            </Toggle> */}
     </div>
   )
 }
 
 export default SettingsJSX
+
