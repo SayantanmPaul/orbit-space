@@ -54,8 +54,8 @@ export default function Page() {
               className="w-24 h-24 object-cover "
             />
             <div className="flex flex-row gap-2 items-center">
-              <p className="text-lg font-semibold font-base ">Loading up your space</p>
-              <Loader strokeWidth={3} className="animate-spin w-5 h-5" />
+              <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">Loading up your space</p>
+              <Loader strokeWidth={3} className="animate-spin lg:w-5 lg:h-5 w-4 h-4" />
             </div>
           </span>
         </div>

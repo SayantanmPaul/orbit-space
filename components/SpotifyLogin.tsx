@@ -21,8 +21,8 @@ const SpotifyLoginJSX = () => {
             ">
                 <div className="space-y-4 ">
                     <div className="space-y-2">
-                        <h4 className="text-md font-semibold">Orbit-Space</h4>
-                        <p className="text-muted-foreground text-sm">
+                        <h4 className="text-md font-medium font-base">Orbit-Space</h4>
+                        <p className="text-muted-foreground text-sm ">
                             Helping to stay focused & boost productivity. Log in to access music controls and other features.
                         </p>
                     </div>
