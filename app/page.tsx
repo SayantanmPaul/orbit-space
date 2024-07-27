@@ -23,6 +23,7 @@ export default function Page() {
   const user = useAppStore(state => state.user)
 
   const [toastShown, setToastShown] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false)
 
   useEffect(() => {
     //check for cookies exist
@@ -47,7 +48,7 @@ export default function Page() {
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem('sourceNotification');
 
-    if (status === 'unauthenticated' && !toastShown && isFirstVisit ) {
+    if (status === 'unauthenticated' && !toastShown && isFirstVisit) {
       const toastId = toast(
         <div className="relative">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-lg"></div>
@@ -107,7 +108,11 @@ export default function Page() {
     return (
       <div className="w-full h-full overflow-hidden relative" id="container">
         <div className='overflow-hidden w-full h-[100vh] object-cover relative ' id='container'>
-          <Videoplayer source={source} />
+          <Videoplayer
+            source={source}
+            onLoading={() => setVideoLoading(true)}
+            onLoaded={() => setVideoLoading(false)}
+          />
         </div>
         <span className="hidden lg:block md:block">
           <FullScreenView />
@@ -137,12 +142,14 @@ export default function Page() {
     )
   }
 
+  const showLoader = status === 'loading' || videoLoading
+  
   return (
     <div className="w-full max-h-screen overflow-hidden relative ">
-      <div className={` transition-opacity duration-1000 ${status === "loading" ? "opacity-100" : "opacity-0"}`}>
-        {status === 'loading' && <LoaderScreenJSX />}
+      <div className={` transition-opacity duration-1000 ${showLoader ? "opacity-100" : "opacity-0"}`}>
+        {showLoader && <LoaderScreenJSX />}
       </div>
-      <div className={` transition-opacity duration-1000 ${status === 'loading' ? "opacity-0" : "opacity-100"}`}>
+      <div className={` transition-opacity duration-1000 ${showLoader ? "opacity-0" : "opacity-100"}`}>
         <ContainerViewJSX />
       </div>
     </div>
