@@ -12,18 +12,24 @@ interface StoreState {
   user: UserType ;
   setUser: (user: UserType) => void;
   getUser: () => UserType;
+  hideCard: boolean;
+  setHideCard: (hide: boolean)=> void;
 }
 export const useAppStore = create<StoreState>()(
   persist(
     (set, get) => ({
       source: '',
       user: { name: '', email: '' },
+      hideCard: false,
 
       setSource: (src: string) => {
         set({ source: src })
       },
       setUser:(user: UserType)=> {
         set({user})
+      },
+      setHideCard(hide: boolean) {
+        set({hideCard: hide})
       },
 
       getSource: () => get().source,

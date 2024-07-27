@@ -6,10 +6,10 @@ import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX, { SpotifyLoginCardSkeleton } from "@/components/SpotifyLogin";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
-import { Loader } from "lucide-react";
+import { AlignVerticalSpaceBetween, BellRing, CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner"
 
 // import Image from "next/image";
@@ -22,11 +22,13 @@ export default function Page() {
   const source = useAppStore(state => state.source)
   const user = useAppStore(state => state.user)
 
+  const [toastShown, setToastShown] = useState(false);
+
   useEffect(() => {
     //check for cookies exist
     const isFirstVisit = !localStorage.getItem('sourceSet');
     if (isFirstVisit) {
-      setSource('/lofi/lofi-boy-chilling-with-cat-moewalls-com.mp4');
+      setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4');
       localStorage.setItem('sourceSet', 'true');
     }
   }, [setSource]);
@@ -41,9 +43,47 @@ export default function Page() {
     }
   }, [status, session, setUser]);
 
+  //toast for info card 
+  useEffect(() => {
+    const isFirstVisit = !localStorage.getItem('sourceNotification');
+
+    if (status === 'unauthenticated' && !toastShown && isFirstVisit ) {
+      const toastId = toast(
+        <div className="relative">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-lg"></div>
+          <div className="relative flex flex-col gap-2 p-3 bg-transparent text-white z-10">
+            <div className="flex flex-row gap-2 items-center">
+              <p className="text-sm font-semibold font-base">A Short Note</p>
+              <CircleAlert strokeWidth={3} className="w-4 h-4" />
+            </div>
+            <p className="text-[13px] tracking-normal dark">
+              This app does not store your information or uploaded content. Note that your content may reset when the cache is cleared.
+            </p>
+            <button
+              className="w-fit text-black font-semibold font-base text-xs bg-white px-4 py-1 mt-2"
+              onClick={() => toast.dismiss(toastId)}
+            >
+              Okay, got it
+            </button>
+          </div>
+        </div>,
+        {
+          unstyled: true,
+          style: {
+            background: 'transparent',
+          },
+          duration: Infinity,
+        }
+      );
+      setToastShown(true);
+      localStorage.setItem('sourceNotification', 'true');
+    }
+  }, [status, toastShown]);
+
+
   const LoaderScreenJSX = () => {
     return (
-      <div className="w-full h-screen flex items-center justify-center dark ">
+      <div className="w-full max-h-screen flex items-center justify-center dark ">
         <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
           <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
             <Image
@@ -73,7 +113,7 @@ export default function Page() {
           <FullScreenView />
         </span>
         {status === 'unauthenticated' &&
-          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-min">
+          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
             <SpotifyLoginJSX />
           </span>
         }
@@ -98,11 +138,11 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full h-full overflow-hidden relative ">
-      <div className={` transition-opacity duration-1000 ${status==="loading" ? "opacity-100" : "opacity-0"}`}>
-        {status=== 'loading' && <LoaderScreenJSX />}
+    <div className="w-full max-h-screen overflow-hidden relative ">
+      <div className={` transition-opacity duration-1000 ${status === "loading" ? "opacity-100" : "opacity-0"}`}>
+        {status === 'loading' && <LoaderScreenJSX />}
       </div>
-      <div className={` transition-opacity duration-1000 ${status==='loading' ? "opacity-0" : "opacity-100"}`}>
+      <div className={` transition-opacity duration-1000 ${status === 'loading' ? "opacity-0" : "opacity-100"}`}>
         <ContainerViewJSX />
       </div>
     </div>

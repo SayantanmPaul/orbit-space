@@ -7,8 +7,6 @@ import { useAppStore } from '@/(store)/App'
 import { Skeleton } from './ui/skeleton'
 
 const SpotifyLoginJSX = () => {
-    const { data: session, status } = useSession();
-    const user = useAppStore(state => state.user)
 
     const signInHandler = async () => {
         await signIn('spotify', { redirect: false });
@@ -17,10 +15,10 @@ const SpotifyLoginJSX = () => {
 
     return (
         <HoverCard>
-            <div className="max-w-96 min-w-[360px] w-full bg-black/40 backdrop-blur-xl shadow-lg dark p-4 text-base z-50 rounded-md borderp-4 text-popover-foreground outline-none
+            <div className="max-w-96 w-full bg-black/40 backdrop-blur-xl shadow-lg dark p-4 text-base z-50 rounded-md borderp-4 text-popover-foreground outline-none
             ">
-                <div className="space-y-4 ">
-                    <div className="space-y-2">
+                <div className="space-y-4 w-full ">
+                    <div className="space-y-2 w-full">
                         <h4 className="text-md font-medium font-base">Orbit-Space</h4>
                         <p className="text-muted-foreground text-sm ">
                             Helping to stay focused & boost productivity. Log in to access music controls and other features.
