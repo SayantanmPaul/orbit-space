@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SessionProvider from "@/Session/SessionProvider";
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "Orbit: Your own space",
@@ -14,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        {children}
+        <SessionProvider>
+          {children}
+          <Toaster position="top-left" />
+        </SessionProvider>
       </body>
     </html>
   );

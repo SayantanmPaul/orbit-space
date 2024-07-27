@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { PopoverContent } from '@radix-ui/react-popover'
-import { Earth, Music4, Settings } from 'lucide-react'
+import { Earth, ListMusic, Music4, Settings } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { WallpaperSelection } from './BackgroundOptions'
 import { Popover, PopoverTrigger } from './ui/popover'
@@ -61,10 +61,12 @@ const SettingsJSX = () => {
               aria-label="Toggle bold"
               className='group hover:bg-black/30 rounded-lg'
             >
-              <Music4
+              <ListMusic size={18}
+                className='text-white group-hover:scale-110 duration-300 ' />
+              {/* <Music4
                 size={18}
                 className='text-white group-hover:rotate-[25deg] duration-300 '
-              />
+              /> */}
             </ToggleGroupItem>
           </>
         }
