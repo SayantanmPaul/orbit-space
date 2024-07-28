@@ -1,4 +1,7 @@
+import { useEffect, useRef } from 'react';
 import '/app/globals.css';
+import ReactPlayer from 'react-player'
+import dynamic from "next/dynamic";
 
 const Videoplayer = ({
   source,
@@ -11,24 +14,30 @@ const Videoplayer = ({
   onLoading?: () => void,
   onLoaded?: () => void
 }) => {
+  const playerRef = useRef<ReactPlayer>(null);
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.seekTo(0); // Optional: reset the video to the beginning
+    }
+  }, [source]);
 
   return (
-    <>
-      <video
+    <div className={`player-wrapper ${className}`}>
+      <ReactPlayer
+        ref={playerRef}
+        url={source}
         key={source}
-        autoPlay
+        playing
         loop
         muted
-        playsInline
-        onWaiting={onLoading}
-        onLoadedData={onLoaded}
-        className={`lg:w-full w-auto h-screen object-cover transition-transform  duration-500 ease-in-out ${className}`}
-        
-        >
-        <source src={source} />
-      </video>
-    </>
+        width="100%"
+        height="100%"
+        className="react-player"
+        controls={false}
+      />
+    </div>
   );
 }
-
-export default Videoplayer;
+//prevent hydration error
+export default dynamic(() => Promise.resolve(Videoplayer), { ssr: false });

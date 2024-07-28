@@ -93,6 +93,7 @@ export default function Page() {
               height={500}
               alt="loading"
               className="w-24 h-24 object-cover "
+              priority
             />
             <div className="flex flex-row gap-2 items-center">
               <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">Loading up your space</p>
