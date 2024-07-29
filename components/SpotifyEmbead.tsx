@@ -9,7 +9,7 @@ const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
         playlistLink = 'https://open.spotify.com/embed/playlist/6ERjveQi38OO1Zi4hO9qCy?utm_source=generator&theme=0',
     }: {
         disabled?: boolean,
-        playlistLink?: string
+        playlistLink?: string 
     }) {
     const hide = useAppStore(state => state.hideCard);
     const setHide = useAppStore(state => state.setHideCard);

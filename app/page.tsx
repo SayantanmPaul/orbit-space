@@ -139,9 +139,12 @@ export default function Page() {
 
         <span className={!user.name ? 'hidden lg:block' : 'block'}>
           {/* handleClickOutSide */}
-          <SpotifyEmbeadJSX playlistLink={currentPlayList} disabled={user.name ? false : true} />
+          <SpotifyEmbeadJSX
+            playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList : 'https://open.spotify.com/embed/playlist/6ERjveQi38OO1Zi4hO9qCy?utm_source=generator&theme=0'}
+            disabled={!user.name}
+          />
         </span>
-      </div>
+      </div >
     )
   }
 
