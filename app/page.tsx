@@ -3,10 +3,10 @@ import { useAppStore } from "@/(store)/App";
 import FullScreenView from "@/components/FullScreenView";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
-import SpotifyLoginJSX, { SpotifyLoginCardSkeleton } from "@/components/SpotifyLogin";
+import SpotifyLoginJSX from "@/components/SpotifyLogin";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
-import { AlignVerticalSpaceBetween, BellRing, CircleAlert, Loader } from "lucide-react";
+import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +21,7 @@ export default function Page() {
 
   const source = useAppStore(state => state.source)
   const user = useAppStore(state => state.user)
+  const currentPlayList = useAppStore(state => state.playList)
 
   const [toastShown, setToastShown] = useState(false);
   const [videoLoading, setVideoLoading] = useState(false)
@@ -94,6 +95,7 @@ export default function Page() {
               alt="loading"
               className="w-24 h-24 object-cover "
               priority
+              unoptimized
             />
             <div className="flex flex-row gap-2 items-center">
               <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">Loading up your space</p>
@@ -137,14 +139,14 @@ export default function Page() {
 
         <span className={!user.name ? 'hidden lg:block' : 'block'}>
           {/* handleClickOutSide */}
-          <SpotifyEmbeadJSX disabled={user.name ? false : true} />
+          <SpotifyEmbeadJSX playlistLink={currentPlayList} disabled={user.name ? false : true} />
         </span>
       </div>
     )
   }
 
   const showLoader = status === 'loading' || videoLoading
-  
+
   return (
     <div className="w-full max-h-screen overflow-hidden relative ">
       <div className={` transition-opacity duration-1000 ${showLoader ? "opacity-100" : "opacity-0"}`}>

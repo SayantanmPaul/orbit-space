@@ -6,6 +6,7 @@ import { WallpaperSelection } from './BackgroundOptions'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
 import classNames from 'classnames'
+import AddNewPlayList from "./AddNewPlayList"
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -61,18 +62,24 @@ const SettingsJSX = () => {
                 <WallpaperSelection />
               </PopoverContent>
             </Popover>
-            <ToggleGroupItem
-              value="bold"
-              aria-label="Toggle bold"
-              className='group hover:bg-black/30 rounded-lg'
-            >
-              <ListMusic size={18}
-                className='text-white group-hover:scale-110 duration-300 ' />
-              {/* <Music4
-                size={18}
-                className='text-white group-hover:rotate-[25deg] duration-300 '
-              /> */}
-            </ToggleGroupItem>
+            <Popover>
+              <PopoverTrigger>
+                <ToggleGroupItem
+                  value="bold"
+                  aria-label="Toggle bold"
+                  className='group hover:bg-black/30 rounded-lg'
+                >
+                  <ListMusic size={18}
+                    className='text-white group-hover:scale-110 duration-300 ' />
+                </ToggleGroupItem>
+              </PopoverTrigger>
+              <PopoverContent className={`bg-black/50 backdrop-blur-xl shadow-lg m-4 pl-0 dark ${animationClass}`}>
+                <div className="">
+                  <AddNewPlayList />
+                </div>
+              </PopoverContent>
+            </Popover>
+
           </>
         }
       </ToggleGroup>
