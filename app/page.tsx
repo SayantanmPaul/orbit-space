@@ -1,5 +1,7 @@
 "use client"
 import { useAppStore } from "@/(store)/App";
+import AudioNoiseControls from "@/components/AudioNoiseControls";
+import AudioNoiseControlsJSX from "@/components/AudioNoiseControls";
 import FullScreenView from "@/components/FullScreenView";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
@@ -134,13 +136,15 @@ export default function Page() {
               <SettingsJSX />
             </span>
           </>
-
         }
-
+        <span className="fixed right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
+          <AudioNoiseControls disabled={!user.name} />
+        </span>
         <span className={!user.name ? 'hidden lg:block' : 'block'}>
           {/* handleClickOutSide */}
           <SpotifyEmbeadJSX
-            playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList : 'https://open.spotify.com/embed/playlist/6ERjveQi38OO1Zi4hO9qCy?utm_source=generator&theme=0'}
+            playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList :
+              'https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator'}
             disabled={!user.name}
           />
         </span>

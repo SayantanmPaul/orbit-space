@@ -7,11 +7,14 @@ import { toast } from 'sonner';
 import { useAppStore } from '@/(store)/App';
 import '../app/globals.css'
 
+// check for playlist url validity
 const playlistSchema = z.object({
     url: z.string().url().startsWith('https://open.spotify.com/playlist/', {
         message: 'url is not valid, please try again later.'
     })
 });
+
+// playlist link fromat for iframe
 const formatPlaylistUrl = (url: string) => {
     const urlParts = url.split('?')[0].split('/');
     const playlistId = urlParts[urlParts.length - 1];
@@ -21,6 +24,8 @@ const formatPlaylistUrl = (url: string) => {
 const AddNewPlayList = () => {
     const setPlayList = useAppStore(state => state.setPlayList);
     const currentPlayList = useAppStore(state => state.playList)
+    const setHide = useAppStore(state => state.setHideCard);
+    const hide = useAppStore(state => state.hideCard);
 
     const [playlistUrl, setPlaylistUrl] = useState(currentPlayList);
     const [error, setError] = useState('');
@@ -39,6 +44,7 @@ const AddNewPlayList = () => {
             const formattedUrl = formatPlaylistUrl(playlistUrl);
             setPlayList(formattedUrl)
             toast.success('Playlist URL added successfully!');
+            setHide(!hide);
             setLoading(false);
         }
     };
@@ -49,8 +55,8 @@ const AddNewPlayList = () => {
         <div className=" flex flex-col gap-4 dark text-white p-4 scroll-smooth rounded-md w-96">
             <div className="space-y-2">
                 <h4 className="font-medium leading-none font-base">Add custom playlist</h4>
-                <p className="text-sm text-muted-foreground">
-                    Don&apos;t know how to add a playlist?
+                <p className="text-xs text-muted-foreground">
+                    Don&apos;t know how to get the link of a playlist?
                     {" "}
                     <a className='text-violet-400 underline-offset-4' href='https://mashable.com/article/spotify-share-playlist-how-to'>
                         learn more</a>
@@ -67,7 +73,7 @@ const AddNewPlayList = () => {
                     />
                     {error && <p className="text-rose-500 text-xs font-base ml-3 mt-2">{error}</p>}
                     <div className='w-full flex justify-end'>
-                        <Button type='submit' className='w-full  max-w-24 rounded-none h-8 my-3' disabled={loading}>
+                        <Button type='submit' className='w-full  max-w-24 rounded-none h-8 mt-3' disabled={loading}>
                             {loading ? 'Adding...' : 'Add'}
                         </Button>
                     </div>
