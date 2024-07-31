@@ -8,6 +8,7 @@ import QuoteCard from "@/components/QuoteCard";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX from "@/components/SpotifyLogin";
+import { ToggleHide } from "@/components/ToggleHideSettings";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
 import { CircleAlert, Loader } from "lucide-react";
@@ -21,15 +22,17 @@ export default function Page() {
   const ref = useRef(null);
 
   const { data: session, status } = useSession();
-  const setSource = useAppStore(state => state.setSource)
-  const setUser = useAppStore(state => state.setUser)
+  const setSource = useAppStore((state) => state.setSource)
+  const setUser = useAppStore((state) => state.setUser)
 
-  const source = useAppStore(state => state.source)
-  const user = useAppStore(state => state.user)
+  const source = useAppStore((state) => state.source)
+  const user = useAppStore((state) => state.user)
   const currentPlayList = useAppStore(state => state.playList)
 
-  const hideTime = useAppStore(state => state.hideTime)
-  const hideQuote = useAppStore(state => state.hideQuote)
+  const hideTime = useAppStore((state) => state.hideTime)
+  const hideQuote = useAppStore((state) => state.hideQuote)
+
+  const hideSettings = useAppStore((state) => state.hideAllSettings)
 
   const [toastShown, setToastShown] = useState(false);
   const [videoLoading, setVideoLoading] = useState(false)
@@ -126,15 +129,18 @@ export default function Page() {
             onLoaded={() => setVideoLoading(false)}
           />
         </div>
-        <span className="hidden lg:block md:block">
-          <FullScreenView />
+        <span className=" absolute top-4 right-4 hidden lg:block md:block">
+          <span className="flex flex-row gap-4">
+            {!hideSettings && <FullScreenView />}
+            <ToggleHide disabled={!user.name} />
+          </span>
         </span>
         {status === 'unauthenticated' &&
           <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
             <SpotifyLoginJSX />
           </span>
         }
-        {status === 'authenticated' &&
+        {status === 'authenticated' && !hideSettings &&
           <span className="absolute bottom-4 left-4">
             <span className="flex flex-row gap-4">
               <UserProfileJSX />
@@ -142,21 +148,26 @@ export default function Page() {
             </span>
           </span>
         }
-        <span className="fixed right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
-          <AudioNoiseControls disabled={!user.name} />
-        </span>
-        <span className={!user.name ? 'hidden lg:block' : 'block'}>
-          {/* handleClickOutSide */}
-          <SpotifyEmbeadJSX
-            playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList :
-              'https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator'}
-            disabled={!user.name}
-          />
-        </span>
+        {!hideSettings &&
+          (
+            <>
+              <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
+                <AudioNoiseControls disabled={!user.name} />
+              </span>
+              <span className={!user.name ? 'hidden lg:block' : 'block'}>
+                {/* handleClickOutSide */}
+                <SpotifyEmbeadJSX
+                  playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList :
+                    'https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator'}
+                  disabled={!user.name}
+                />
+              </span>
+            </>
+          )}
         <span className=" absolute top-4 left-4">
           <ClockCard hide={hideTime} references={ref} />
         </span>
-        <span className=" absolute top-48 left-4">
+        <span className={`absolute left-4 ${hideTime ? 'top-4' : 'top-48'}`}>
           <QuoteCard hide={hideQuote} references={ref} />
         </span>
       </div >

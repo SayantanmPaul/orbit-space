@@ -34,6 +34,9 @@ interface StoreState {
   hideQuote: boolean,
   setHideQuote: (hide: boolean) => void,
 
+  hideAllSettings: boolean,
+  setHideAllSettings: (hide: boolean)=> void
+
 }
 export const useAppStore = create<StoreState>()(
   persist(
@@ -46,6 +49,7 @@ export const useAppStore = create<StoreState>()(
       isPlayingBgAudio: false,
       hideTime: true,
       hideQuote: true,
+      hideAllSettings: false,
 
       setSource: (src: string) => {
         set({ source: src })
@@ -64,6 +68,9 @@ export const useAppStore = create<StoreState>()(
       },
       setPlayList(link: string) {
         set({ playList: link })
+      },
+      setHideAllSettings(hide) {
+        set({hideAllSettings: hide})
       },
       setBackgroundVolumes: (volume: number, index: number) => {
         set((state) => {

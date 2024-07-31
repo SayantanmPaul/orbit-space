@@ -15,14 +15,12 @@ const FullScreenView = () => {
         setIsFullScreen(!isFullScreen)
     }
     return (
-        <span className='absolute top-4 right-4 bg-black/20 hover:bg-black/30 backdrop-blur-lg rounded-lg group w-11 h-11'>
-            <Toggle onClick={toggleFullScreenView} variant="outline" aria-label="Toggle italic" className='w-full h-full'>
-                {!isFullScreen ?
-                    <Maximize size={18} className='text-white group-hover:scale-110 duration-300 ' /> :
-                    <Minimize size={18} className='text-white group-hover:scale-110 duration-300' />
-                }
-            </Toggle>
-        </span>
+        <Toggle onClick={toggleFullScreenView} variant="outline" aria-label="Toggle italic" className='bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
+            {!isFullScreen ?
+                <Maximize size={18} className='text-white group-hover:scale-110 duration-300 ' /> :
+                <Minimize size={18} className='text-white group-hover:scale-110 duration-300' />
+            }
+        </Toggle>
     )
 }
 

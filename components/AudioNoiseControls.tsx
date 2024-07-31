@@ -96,7 +96,7 @@ const AudioNoiseControls = ({ disabled }: { disabled?: boolean }) => {
     };
 
     return (
-        <div className='flex lg:flex-row flex-col-reverse gap-4'>
+        <div className='relative flex lg:flex-row flex-col-reverse gap-4'>
             <Popover>
                 {audioSource.map((audio, index) => (
                     <audio key={index} ref={(el: any) => audioRefs.current[index] = el} loop autoPlay>

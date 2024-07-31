@@ -86,7 +86,7 @@ const SettingsJSX = () => {
             </Popover>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className='rounded-lg group w-10 h-10 flex items-center justify-center cursor-pointer'>
+                <div className='rounded-lg group w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-black/20'>
                   <BookOpen size={18} className='text-white group-hover:scale-110 duration-300' />
                 </div>
               </DropdownMenuTrigger>
