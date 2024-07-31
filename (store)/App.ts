@@ -33,7 +33,7 @@ interface StoreState {
 
   hideQuote: boolean,
   setHideQuote: (hide: boolean) => void,
-  
+
 }
 export const useAppStore = create<StoreState>()(
   persist(
@@ -44,8 +44,8 @@ export const useAppStore = create<StoreState>()(
       playList: '',
       backgroundVolumes: audioSource.map((source) => source.initialVolume),
       isPlayingBgAudio: false,
-      hideTime: false,
-      hideQuote: false,
+      hideTime: true,
+      hideQuote: true,
 
       setSource: (src: string) => {
         set({ source: src })
