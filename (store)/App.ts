@@ -26,7 +26,14 @@ interface StoreState {
   setBackgroundVolumes: (index: number, volume: number) => void;
 
   isPlayingBgAudio: boolean,
-  setIsPlayingBgAudio: (play: boolean) => void
+  setIsPlayingBgAudio: (play: boolean) => void,
+
+  hideTime: boolean,
+  setHideTime: (hide: boolean) => void
+
+  hideQuote: boolean,
+  setHideQuote: (hide: boolean) => void,
+  
 }
 export const useAppStore = create<StoreState>()(
   persist(
@@ -37,6 +44,8 @@ export const useAppStore = create<StoreState>()(
       playList: '',
       backgroundVolumes: audioSource.map((source) => source.initialVolume),
       isPlayingBgAudio: false,
+      hideTime: false,
+      hideQuote: false,
 
       setSource: (src: string) => {
         set({ source: src })
@@ -46,6 +55,12 @@ export const useAppStore = create<StoreState>()(
       },
       setHideCard(hide: boolean) {
         set({ hideCard: hide })
+      },
+      setHideTime(hide: boolean) {
+        set({ hideTime: hide })
+      },
+      setHideQuote(hide: boolean) {
+        set({ hideQuote: hide })
       },
       setPlayList(link: string) {
         set({ playList: link })

@@ -2,7 +2,9 @@
 import { useAppStore } from "@/(store)/App";
 import AudioNoiseControls from "@/components/AudioNoiseControls";
 import AudioNoiseControlsJSX from "@/components/AudioNoiseControls";
+import ClockCard from "@/components/ClockCard";
 import FullScreenView from "@/components/FullScreenView";
+import QuoteCard from "@/components/QuoteCard";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX from "@/components/SpotifyLogin";
@@ -11,12 +13,13 @@ import Videoplayer from "@/components/videoplayer";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner"
-
 // import Image from "next/image";
 
 export default function Page() {
+  const ref = useRef(null);
+
   const { data: session, status } = useSession();
   const setSource = useAppStore(state => state.setSource)
   const setUser = useAppStore(state => state.setUser)
@@ -25,6 +28,9 @@ export default function Page() {
   const user = useAppStore(state => state.user)
   const currentPlayList = useAppStore(state => state.playList)
 
+  const hideTime = useAppStore(state => state.hideTime)
+  const hideQuote = useAppStore(state => state.hideQuote)
+
   const [toastShown, setToastShown] = useState(false);
   const [videoLoading, setVideoLoading] = useState(false)
 
@@ -32,7 +38,7 @@ export default function Page() {
     //check for cookies exist
     const isFirstVisit = !localStorage.getItem('sourceSet');
     if (isFirstVisit) {
-      setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4');
+      setSource('/lofi/Cozy House Rainy Day.mp4');
       localStorage.setItem('sourceSet', 'true');
     }
   }, [setSource]);
@@ -110,9 +116,10 @@ export default function Page() {
   }
 
   const ContainerViewJSX = () => {
+
     return (
-      <div className="w-full h-full overflow-hidden relative" id="container">
-        <div className='overflow-hidden w-full h-[100vh] object-cover relative ' id='container'>
+      <div ref={ref} className="w-full h-full overflow-hidden relative" id="container">
+        <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
           <Videoplayer
             source={source}
             onLoading={() => setVideoLoading(true)}
@@ -128,14 +135,12 @@ export default function Page() {
           </span>
         }
         {status === 'authenticated' &&
-          <>
-            <span className="absolute bottom-4 left-4">
+          <span className="absolute bottom-4 left-4">
+            <span className="flex flex-row gap-4">
               <UserProfileJSX />
-            </span>
-            <span className="absolute bottom-4 left-20">
               <SettingsJSX />
             </span>
-          </>
+          </span>
         }
         <span className="fixed right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
           <AudioNoiseControls disabled={!user.name} />
@@ -148,6 +153,12 @@ export default function Page() {
             disabled={!user.name}
           />
         </span>
+        <span className=" absolute top-4 left-4">
+          <ClockCard hide={hideTime} references={ref} />
+        </span>
+        <span className=" absolute top-48 left-4">
+          <QuoteCard hide={hideQuote} references={ref} />
+        </span>
       </div >
     )
   }
@@ -156,10 +167,10 @@ export default function Page() {
 
   return (
     <div className="w-full max-h-screen overflow-hidden relative ">
-      <div className={` transition-opacity duration-1000 ${showLoader ? "opacity-100" : "opacity-0"}`}>
+      <div className={` transition-opacity w-full h-full duration-1000 ${showLoader ? "opacity-100" : "opacity-0"}`}>
         {showLoader && <LoaderScreenJSX />}
       </div>
-      <div className={` transition-opacity duration-1000 ${showLoader ? "opacity-0" : "opacity-100"}`}>
+      <div className={` transition-opacity w-full h-full duration-1000 ${showLoader ? "opacity-0" : "opacity-100"}`}>
         <ContainerViewJSX />
       </div>
     </div>

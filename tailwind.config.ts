@@ -78,7 +78,9 @@ const config = {
         "popover": 'popoverAnimation 0.3s ease-in-out',
       },
       fontFamily: {
-        'base': ["Poppins", "sans- serif"]
+        'base': ["Poppins", "sans- serif"],
+        'sans-secondary': ["Alegreya", "serif"],
+        'oswald': ["Oswald", "sans-serif"]
       },
     },
   },

@@ -49,8 +49,6 @@ const AddNewPlayList = () => {
         }
     };
 
-    console.log(currentPlayList);
-
     return (
         <div className=" flex flex-col gap-4 dark text-white p-4 scroll-smooth rounded-md w-96">
             <div className="space-y-2">
