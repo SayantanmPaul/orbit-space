@@ -49,7 +49,9 @@ export const audioSource = [
 const AudioNoiseControls = ({ disabled }: { disabled?: boolean }) => {
     const audioRefs = useRef<HTMLAudioElement[]>([]);
     const { backgroundVolumes, setBackgroundVolumes } = useAppStore();
-    const [isPlaying, setIsPlaying] = useState(false)
+
+    const setIsPlaying = useAppStore(state => state.setIsPlayingBgAudio)
+    const isPlaying = useAppStore(state => state.isPlayingBgAudio)
 
     // useEffect(() => {
     //     audioSource.forEach((audio, i) => {
@@ -72,12 +74,17 @@ const AudioNoiseControls = ({ disabled }: { disabled?: boolean }) => {
         }
     }, [backgroundVolumes, isPlaying, setBackgroundVolumes]);
 
-    // useEffect(() => {
-    //     if (audioRef.current) {
-    //         audioRef.current.src = currentSrc;
-    //         audioRef.current.play();
-    //     }
-    // }, [currentSrc]);
+    //if window closed setIsPlaying to flase
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            setIsPlaying(false);
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [setIsPlaying]);
 
     const togglePlayPause = () => {
         setIsPlaying(!isPlaying);
