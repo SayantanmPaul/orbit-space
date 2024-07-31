@@ -38,7 +38,7 @@ export default function Page() {
     //check for cookies exist
     const isFirstVisit = !localStorage.getItem('sourceSet');
     if (isFirstVisit) {
-      setSource('/lofi/Cozy House Rainy Day.mp4');
+      setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4');
       localStorage.setItem('sourceSet', 'true');
     }
   }, [setSource]);

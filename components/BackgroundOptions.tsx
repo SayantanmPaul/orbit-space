@@ -6,9 +6,9 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 
 const localVideoSource = [
-  "/lofi/204241-923909574.mp4",
+  "/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4",
+  "/lofi/steam-autumn-sale-2024-moewalls-com.mp4",
   "/lofi/lofi-boy-chilling-with-cat-moewalls-com.mp4",
-  "/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4"
 ]
 
 export function WallpaperSelection() {
