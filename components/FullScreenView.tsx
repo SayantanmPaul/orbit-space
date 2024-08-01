@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
-import { Toggle } from './ui/toggle'
 import { Maximize, Minimize } from 'lucide-react'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { tooltipClass } from '@/lib/utils'
 
 const FullScreenView = ({ hide }: { hide?: boolean }) => {
     const [isFullScreen, setIsFullScreen] = useState(false)
@@ -15,12 +21,21 @@ const FullScreenView = ({ hide }: { hide?: boolean }) => {
         setIsFullScreen(!isFullScreen)
     }
     return (
-        <button onClick={toggleFullScreenView} className={`bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer  ${hide ? 'hidden': 'block'}`}>
-            {!isFullScreen ?
-                <Maximize size={18} className='text-white group-hover:scale-110 duration-300 w-5 h-5' /> :
-                <Minimize size={18} className='text-white group-hover:scale-110 duration-300 w-5 h-5' />
-            }
-        </button>
+        <TooltipProvider delayDuration={100}>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <button onClick={toggleFullScreenView} className={`bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer  ${hide ? 'hidden' : 'block'}`}>
+                        {!isFullScreen ?
+                            <Maximize size={18} className='text-white group-hover:scale-110 duration-300 w-5 h-5' /> :
+                            <Minimize size={18} className='text-white group-hover:scale-110 duration-300 w-5 h-5' />
+                        }
+                    </button>
+                </TooltipTrigger>
+                <TooltipContent className={tooltipClass}>
+                    {!isFullScreen ? 'Maximize' : 'Minimize'}
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     )
 }
 

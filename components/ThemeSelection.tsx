@@ -58,7 +58,7 @@ const ThemeSelectionJSX = () => {
     };
 
     return (
-        <ScrollArea className=' flex flex-col gap-4 dark text-white p-4 scroll-smooth w-80 max-h-72 relative backdrop-blur-lg'>
+        <ScrollArea className=' flex flex-col gap-4 dark text-white p-4 scroll-smooth w-80 max-h-72 relative bg-black/30'>
             <div className="space-y-4 ">
                 <h4 className="font-medium leading-none text-sm font-base">Select theme</h4>
                 <div className='flex flex-col gap-2'>

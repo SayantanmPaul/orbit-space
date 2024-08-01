@@ -79,7 +79,7 @@ const WallpaperSelection = () => {
   // }, [setSource, setVideoURls, isUploaded])
 
   return (
-    <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-md bg-black/40 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
+    <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-lg bg-black/60 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
       <div className="flex flex-col w-max gap-4 p-4 items-center relative ">
         {videoURls.map((video, i) => (
           <div
@@ -109,9 +109,10 @@ const WallpaperSelection = () => {
               <Image
                 src={'/galaxy.gif'}
                 alt="galaxy"
-                width={100}
-                height={100}
+                width={50}
+                height={50}
                 className="absolute top-3 right-3 w-8 h-8"
+                unoptimized
               />
             }
             {isUploaded[i] &&

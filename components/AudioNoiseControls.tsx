@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Bird, CloudRainWind, FlameKindling, Pause, Play, SlidersVertical, Trees, Waves, Zap, ZapOff } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { animationClass } from '@/lib/utils';
+import { animationClass, tooltipClass } from '@/lib/utils';
 import { Button } from './ui/button';
 import { useAppStore } from '@/(store)/App';
 import { TbWindmill } from "react-icons/tb";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export const audioSource = [
     {
@@ -96,48 +102,64 @@ const AudioNoiseControls = ({ disabled, hide }: { disabled?: boolean, hide?: boo
     };
 
     return (
-        <div className={`relative flex lg:flex-row flex-col-reverse gap-4 ${hide ? 'hidden': 'block'}`}>
-            <Popover>
-                {audioSource.map((audio, index) => (
-                    <audio key={index} ref={(el: any) => audioRefs.current[index] = el} loop autoPlay>
-                        <source src={audio.source} type='audio/wav' />
-                    </audio>
-                ))}
-                <PopoverTrigger>
-                    <span className='bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
-                        <SlidersVertical strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' />
-                    </span>
-                </PopoverTrigger>
-                <PopoverContent className={`bg-black/40 backdrop-blur-xl shadow-lg m-4 flex flex-col gap-2 dark rounded-lg ${animationClass}`}>
-                    {/* dynamic player */}
+        <TooltipProvider delayDuration={200}>
+            <div className={`relative flex lg:flex-row flex-col-reverse gap-4 ${hide ? 'hidden' : 'block'}`}>
+                <Popover>
                     {audioSource.map((audio, index) => (
-                        <div key={index} className='flex items-center gap-4 mb-2'>
-                            <button className=' w-20 flex flex-row justify-between gap-2 items-center'>
-                                <p className='font-base text-xs w-full text-start'>{audio.name}</p>
-                                {audio.icon}
-                            </button>
-                            <input
-                                type='range'
-                                min='0'
-                                max='1'
-                                step='0.01'
-                                value={backgroundVolumes[index]}
-                                onChange={(e) => handleVolumeChange(index, e)}
-                                className='w-full'
-                            />
-                        </div>
+                        <audio key={index} ref={(el: any) => audioRefs.current[index] = el} loop autoPlay>
+                            <source src={audio.source} type='audio/wav' />
+                        </audio>
                     ))}
-                </PopoverContent>
-            </Popover>
-            <Button
-                onClick={togglePlayPause}
-                className='bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
-                {isPlaying ?
-                    <Pause strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' /> :
-                    <Play strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' />
-                }
-            </Button>
-        </div>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <PopoverTrigger>
+                                <span className='bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
+                                    <SlidersVertical strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' />
+                                </span>
+                            </PopoverTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent className={tooltipClass}>
+                            Sound effect controls
+                        </TooltipContent>
+                    </Tooltip>
+                    <PopoverContent className={`bg-black/40 backdrop-blur-xl shadow-lg m-4 flex flex-col gap-2 dark rounded-lg ${animationClass}`}>
+                        {/* dynamic player */}
+                        {audioSource.map((audio, index) => (
+                            <div key={index} className='flex items-center gap-4 mb-2'>
+                                <button className=' w-20 flex flex-row justify-between gap-2 items-center'>
+                                    <p className='font-base text-xs w-full text-start'>{audio.name}</p>
+                                    {audio.icon}
+                                </button>
+                                <input
+                                    type='range'
+                                    min='0'
+                                    max='1'
+                                    step='0.01'
+                                    value={backgroundVolumes[index]}
+                                    onChange={(e) => handleVolumeChange(index, e)}
+                                    className='w-full'
+                                />
+                            </div>
+                        ))}
+                    </PopoverContent>
+                </Popover>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={togglePlayPause}
+                            className='bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
+                            {isPlaying ?
+                                <Pause strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' /> :
+                                <Play strokeWidth={2} size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5 ' />
+                            }
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className={tooltipClass}>
+                        {isPlaying ? 'Pause' : 'Play'}
+                    </TooltipContent>
+                </Tooltip>
+            </div>
+        </TooltipProvider>
     )
 }
 

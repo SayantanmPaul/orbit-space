@@ -12,7 +12,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAppStore } from '@/(store)/App'
 import { signOut } from 'next-auth/react'
-import { toast } from 'sonner'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { tooltipClass } from '@/lib/utils'
 
 const UserProfileJSX = () => {
     const user = useAppStore(state => state.user)
@@ -23,22 +29,31 @@ const UserProfileJSX = () => {
         setUser({ name: '', email: '' });
     }
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <span className=' bg-black/40 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer '>
-                    <CircleUserRound size={20} className='text-white group-hover:scale-110 duration-300 w-5 h-5' />
-                </span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-black/40 backdrop-blur-xl shadow-lg dark mx-4">
-                <DropdownMenuLabel>Hi {user?.name}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOutHandler}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <TooltipProvider delayDuration={100}>
+            <DropdownMenu>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                            <span className=' bg-black/40 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer '>
+                                <CircleUserRound size={20} className='text-white group-hover:scale-110 duration-300 w-5 h-5' />
+                            </span>
+                        </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent className={tooltipClass}>
+                        Profile
+                    </TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent className="w-56 bg-black/40 backdrop-blur-xl shadow-lg dark mx-4">
+                    <DropdownMenuLabel>Hi {user?.name}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={signOutHandler}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </TooltipProvider>
     )
 }
 
