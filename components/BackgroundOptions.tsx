@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppStore } from "@/(store)/App";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ArrowUpFromLine, Trash, Trash2 } from "lucide-react";
+import { ArrowUpFromLine, Loader2, Trash, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 
@@ -16,6 +16,8 @@ const WallpaperSelection = () => {
   const source = useAppStore(state => state.source)
 
   const [videoSources, setVideoSources] = useState<string[]>([...localVideoSource])
+  const [loadingStates, setLoadingStates] = useState<boolean[]>(Array(localVideoSource.length).fill(false));
+
   const setIsUploaded = useAppStore(state => state.setIsUploaded)
   const isUploaded = useAppStore(state => state.isUploaded)
 
@@ -32,34 +34,45 @@ const WallpaperSelection = () => {
       const videoUrl = URL.createObjectURL(file);
       const updatedSources = [...videoSources, videoUrl];
       const updatedIsUploaded = [...isUploaded, true];
+      const updatedLoadingStates = [...loadingStates, true];
+
       setVideoSources(updatedSources);
       setVideoURls(updatedSources);
       setIsUploaded(updatedIsUploaded);
       // setSource(videoUrl);
+      setLoadingStates(updatedLoadingStates);
     }
   }
 
   const handleRemove = (index: number) => {
     const updatedSources = videoSources.filter((_, i) => i !== index);
     const updatedIsUploaded = isUploaded.filter((_, i) => i !== index);
+    const updatedLoadingStates = loadingStates.filter((_, i) => i !== index);
     if (videoSources[index] === source) {
       setSource(localVideoSource[0]);
     }
     setVideoSources(updatedSources);
     setVideoURls(updatedSources);
     setIsUploaded(updatedIsUploaded);
+    setLoadingStates(updatedLoadingStates);
   }
 
-  useEffect(() => {
-    const resetURls = () => {
-      setVideoURls([...localVideoSource]),
-        setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4')
-    }
-    window.addEventListener('beforeunload' ,resetURls)
-    return () => {
-      window.removeEventListener('beforeunload', resetURls)
-    }
-  }, [setVideoURls, setSource])
+  const handleVideoLoaded = (index: number) => {
+    const updatedLoadingStates = [...loadingStates];
+    updatedLoadingStates[index] = false;
+    setLoadingStates(updatedLoadingStates);
+  }
+
+  // useEffect(() => {
+  //   const resetURls = () => {
+  //       setVideoURls([...localVideoSource]),
+  //       setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4')
+  //   }
+  //   window.addEventListener('beforeunload' ,resetURls)
+  //   return () => {
+  //     window.removeEventListener('beforeunload', resetURls)
+  //   }
+  // }, [setSource, setVideoURls, isUploaded])
 
   return (
     <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-md bg-black/40 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
@@ -74,10 +87,16 @@ const WallpaperSelection = () => {
               loop
               muted
               playsInline
+              onLoadedData={() => handleVideoLoaded(i)}
               className={`object-fill w-[360px] max-w-[360px] h-48`}
             >
               <source src={video} />
             </video>
+            {loadingStates[i] && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <Loader2 className="w-8 h-8 animate-spin text-white" />
+              </div>
+            )}
             {video === source &&
               <div className="bg-gradient-to-b from-black/70 to-transparent h-32 w-full overflow-hidden absolute top-0">
               </div>

@@ -51,7 +51,7 @@ export default function Page() {
       });
     }
   }, [status, session, setUser]);
-
+  
   // toast card for information
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem('sourceNotification');
@@ -121,8 +121,8 @@ export default function Page() {
       </div>
       <span className="absolute top-4 right-4 hidden lg:block md:block">
         <span className="flex flex-row gap-4">
-          <FullScreenView hide={hideSettings} />
           <ToggleHide disabled={!user.name} />
+          <FullScreenView />
         </span>
       </span>
       {status === 'unauthenticated' &&
@@ -132,7 +132,7 @@ export default function Page() {
       }
       {status === 'authenticated' && !hideSettings &&
         <span className="absolute bottom-4 left-4">
-          <span className="flex flex-row gap-4">
+          <span className="flex flex-row lg:gap-4 gap-2">
             <UserProfileJSX />
             <SettingsJSX />
           </span>

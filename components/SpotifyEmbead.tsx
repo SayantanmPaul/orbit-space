@@ -41,7 +41,7 @@ const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
             <button
                 disabled={disabled}
                 onClick={handleButtonClick}
-                className={`absolute bottom-4 right-36 bg-black/20 backdrop-blur-sm rounded-lg group flex w-12 h-12 items-center justify-center cursor-pointer hover:bg-black/20 ${hideIcon ? 'hidden' : 'block'}`}>
+                className={`absolute bottom-4 lg:right-36 right-4 bg-black/20 backdrop-blur-sm rounded-lg group flex w-12 h-12 items-center justify-center cursor-pointer hover:bg-black/20 ${hideIcon ? 'hidden' : 'block'}`}>
                 <AiFillSpotify size={24} className='text-white group-hover:scale-110 duration-300 w-6 h-6 object-cover my-2' />
             </button>
             {!disabled &&

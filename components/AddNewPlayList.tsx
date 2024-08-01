@@ -49,7 +49,7 @@ const AddNewPlayList = () => {
     };
 
     return (
-        <div className=" flex flex-col gap-4 dark text-white p-4 scroll-smooth rounded-md w-96">
+        <div className=" flex flex-col gap-4 dark text-white p-4 scroll-smooth rounded-md lg:w-96 w-full">
             <div className="space-y-2">
                 <h4 className="font-medium leading-none font-base">Add custom playlist</h4>
                 <p className="text-xs text-muted-foreground">
