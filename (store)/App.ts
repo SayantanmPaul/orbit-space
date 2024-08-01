@@ -1,4 +1,5 @@
 import { audioSource } from "@/components/AudioNoiseControls";
+import { localVideoSource } from "@/components/BackgroundOptions";
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
@@ -12,18 +13,18 @@ interface StoreState {
   getSource: () => string,
 
   user: UserType;
-  setUser: (user: UserType) => void;
-  getUser: () => UserType;
+  setUser: (user: UserType) => void,
+  getUser: () => UserType,
 
   hideCard: boolean;
-  setHideCard: (hide: boolean) => void;
+  setHideCard: (hide: boolean) => void,
 
   playList: string,
   setPlayList: (src: string) => void,
   getPlayList: () => string,
 
   backgroundVolumes: number[],
-  setBackgroundVolumes: (index: number, volume: number) => void;
+  setBackgroundVolumes: (index: number, volume: number) => void,
 
   isPlayingBgAudio: boolean,
   setIsPlayingBgAudio: (play: boolean) => void,
@@ -35,8 +36,12 @@ interface StoreState {
   setHideQuote: (hide: boolean) => void,
 
   hideAllSettings: boolean,
-  setHideAllSettings: (hide: boolean)=> void
+  setHideAllSettings: (hide: boolean) => void,
 
+  videoSources: string[],
+  setVideoSources: (sources: string[]) => void,
+  isUploaded: boolean[],
+  setIsUploaded: (uploaded: boolean[]) => void,
 }
 export const useAppStore = create<StoreState>()(
   persist(
@@ -50,6 +55,8 @@ export const useAppStore = create<StoreState>()(
       hideTime: true,
       hideQuote: true,
       hideAllSettings: false,
+      videoSources: localVideoSource.map((videoURl) => videoURl),
+      isUploaded: localVideoSource.map(() => false),
 
       setSource: (src: string) => {
         set({ source: src })
@@ -57,20 +64,20 @@ export const useAppStore = create<StoreState>()(
       setUser: (user: UserType) => {
         set({ user })
       },
-      setHideCard(hide: boolean) {
+      setHideCard: (hide: boolean) => {
         set({ hideCard: hide })
       },
-      setHideTime(hide: boolean) {
+      setHideTime: (hide: boolean) => {
         set({ hideTime: hide })
       },
-      setHideQuote(hide: boolean) {
+      setHideQuote: (hide: boolean) => {
         set({ hideQuote: hide })
       },
-      setPlayList(link: string) {
+      setPlayList: (link: string) => {
         set({ playList: link })
       },
-      setHideAllSettings(hide) {
-        set({hideAllSettings: hide})
+      setHideAllSettings: (hide) => {
+        set({ hideAllSettings: hide })
       },
       setBackgroundVolumes: (volume: number, index: number) => {
         set((state) => {
@@ -80,8 +87,15 @@ export const useAppStore = create<StoreState>()(
         });
       },
 
-      setIsPlayingBgAudio(play: boolean) {
-        set({ isPlayingBgAudio: play })
+      setIsPlayingBgAudio: (play: boolean) => {
+        set({ isPlayingBgAudio: play });
+      },
+
+      setVideoSources: (sources: string[]) => {
+        set({ videoSources: sources });
+      },
+      setIsUploaded: (uploaded: boolean[]) => {
+        set({ isUploaded: uploaded });
       },
 
       getSource: () => get().source,

@@ -43,7 +43,6 @@ const AddNewPlayList = () => {
             setError('');
             const formattedUrl = formatPlaylistUrl(playlistUrl);
             setPlayList(formattedUrl)
-            toast.success('Playlist URL added successfully!');
             setHide(!hide);
             setLoading(false);
         }

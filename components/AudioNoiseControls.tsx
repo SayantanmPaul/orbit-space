@@ -15,7 +15,7 @@ export const audioSource = [
     },
     {
         icon: <CloudRainWind className='w-6 h-6' />,
-        name: 'rain',
+        name: 'rainfall',
         source: '/background-noises/mixkit-light-rain-loop-1253.wav',
         initialVolume: 0.1,
     },
@@ -46,7 +46,7 @@ export const audioSource = [
 ];
 
 
-const AudioNoiseControls = ({ disabled }: { disabled?: boolean }) => {
+const AudioNoiseControls = ({ disabled, hide }: { disabled?: boolean, hide?: boolean }) => {
     const audioRefs = useRef<HTMLAudioElement[]>([]);
     const { backgroundVolumes, setBackgroundVolumes } = useAppStore();
 
@@ -96,7 +96,7 @@ const AudioNoiseControls = ({ disabled }: { disabled?: boolean }) => {
     };
 
     return (
-        <div className='relative flex lg:flex-row flex-col-reverse gap-4'>
+        <div className={`relative flex lg:flex-row flex-col-reverse gap-4 ${hide ? 'hidden': 'block'}`}>
             <Popover>
                 {audioSource.map((audio, index) => (
                     <audio key={index} ref={(el: any) => audioRefs.current[index] = el} loop autoPlay>

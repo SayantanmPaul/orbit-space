@@ -2,7 +2,6 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { PopoverContent } from '@radix-ui/react-popover'
 import { BookOpen, Clock2, Earth, ListMusic, Quote, Settings } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { WallpaperSelection } from './BackgroundOptions'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
 import AddNewPlayList from "./AddNewPlayList"
@@ -16,6 +15,7 @@ import {
   DropdownMenuTrigger
 } from "./ui/dropdown-menu"
 import { useAppStore } from "@/(store)/App"
+import WallpaperSelection from "./BackgroundOptions"
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -93,13 +93,15 @@ const SettingsJSX = () => {
               <DropdownMenuContent className="w-64 bg-black/40 backdrop-blur-xl shadow-lg dark m-4">
                 <DropdownMenuItem onClick={() => setHideTime(!hideTime)}>
                   <Clock2 className="mr-2 h-4 w-4" />
-                  <span>Show time</span>
+                  {hideTime ? 'Show time' : 'Hide time'}
+                  {/* <span>Show time</span> */}
                   <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setHideQuote(!hideQuote)}>
                   <Quote className="mr-2 h-4 w-4" />
-                  <span>Show random quotes</span>
+                  {/* <span>Show random quotes</span> */}
+                  {hideQuote ? 'Show random quotes' : 'Hide random quotes'}
                   <DropdownMenuShortcut>⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

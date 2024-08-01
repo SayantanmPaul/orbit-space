@@ -1,7 +1,6 @@
-"use client"
+"use client";
 import { useAppStore } from "@/(store)/App";
 import AudioNoiseControls from "@/components/AudioNoiseControls";
-import AudioNoiseControlsJSX from "@/components/AudioNoiseControls";
 import ClockCard from "@/components/ClockCard";
 import FullScreenView from "@/components/FullScreenView";
 import QuoteCard from "@/components/QuoteCard";
@@ -14,31 +13,29 @@ import Videoplayer from "@/components/videoplayer";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner"
-// import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 export default function Page() {
   const ref = useRef(null);
 
   const { data: session, status } = useSession();
-  const setSource = useAppStore((state) => state.setSource)
-  const setUser = useAppStore((state) => state.setUser)
+  const setSource = useAppStore((state) => state.setSource);
+  const setUser = useAppStore((state) => state.setUser);
 
-  const source = useAppStore((state) => state.source)
-  const user = useAppStore((state) => state.user)
-  const currentPlayList = useAppStore(state => state.playList)
+  const source = useAppStore((state) => state.source);
+  const user = useAppStore((state) => state.user);
+  const currentPlayList = useAppStore((state) => state.playList);
 
-  const hideTime = useAppStore((state) => state.hideTime)
-  const hideQuote = useAppStore((state) => state.hideQuote)
+  const hideTime = useAppStore((state) => state.hideTime);
+  const hideQuote = useAppStore((state) => state.hideQuote);
 
-  const hideSettings = useAppStore((state) => state.hideAllSettings)
+  const hideSettings = useAppStore((state) => state.hideAllSettings);
 
   const [toastShown, setToastShown] = useState(false);
-  const [videoLoading, setVideoLoading] = useState(false)
+  const [videoLoading, setVideoLoading] = useState(false);
 
   useEffect(() => {
-    //check for cookies exist
     const isFirstVisit = !localStorage.getItem('sourceSet');
     if (isFirstVisit) {
       setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4');
@@ -46,7 +43,6 @@ export default function Page() {
     }
   }, [setSource]);
 
-  //setUser when the user signed in 
   useEffect(() => {
     if (status === 'authenticated' && session) {
       setUser({
@@ -56,10 +52,9 @@ export default function Page() {
     }
   }, [status, session, setUser]);
 
-  //toast for info card 
+  // toast card for information
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem('sourceNotification');
-
     if (status === 'unauthenticated' && !toastShown && isFirstVisit) {
       const toastId = toast(
         <div className="relative">
@@ -93,86 +88,80 @@ export default function Page() {
     }
   }, [status, toastShown]);
 
-
-  const LoaderScreenJSX = () => {
-    return (
-      <div className="w-full max-h-screen flex items-center justify-center dark ">
-        <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
-          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
-            <Image
-              src={'/meteorite.gif'}
-              width={500}
-              height={500}
-              alt="loading"
-              className="w-24 h-24 object-cover "
-              priority
-              unoptimized
-            />
-            <div className="flex flex-row gap-2 items-center">
-              <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">Loading up your space</p>
-              <Loader strokeWidth={3} className="animate-spin lg:w-5 lg:h-5 w-4 h-4" />
-            </div>
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  const ContainerViewJSX = () => {
-
-    return (
-      <div ref={ref} className="w-full h-full overflow-hidden relative" id="container">
-        <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
-          <Videoplayer
-            source={source}
-            onLoading={() => setVideoLoading(true)}
-            onLoaded={() => setVideoLoading(false)}
+  const LoaderScreenJSX = () => (
+    <div className="w-full max-h-screen flex items-center justify-center dark ">
+      <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
+          <Image
+            src={'/meteorite.gif'}
+            width={500}
+            height={500}
+            alt="loading"
+            className="w-24 h-24 object-cover "
+            priority
+            unoptimized
           />
-        </div>
-        <span className=" absolute top-4 right-4 hidden lg:block md:block">
+          <div className="flex flex-row gap-2 items-center">
+            <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">Loading up your space</p>
+            <Loader strokeWidth={3} className="animate-spin lg:w-5 lg:h-5 w-4 h-4" />
+          </div>
+        </span>
+      </div>
+    </div>
+  );
+
+  const ContainerViewJSX = () => (
+    <div ref={ref} className="w-full h-full overflow-hidden relative" id="container">
+      <div className='overflow-hidden w-full h-[100vh] object-cover relative' id='container'>
+        <Videoplayer
+          source={source}
+          onLoading={() => setVideoLoading(true)}
+          onLoaded={() => setVideoLoading(false)}
+        />
+      </div>
+      <span className="absolute top-4 right-4 hidden lg:block md:block">
+        <span className="flex flex-row gap-4">
+          <FullScreenView hide={hideSettings} />
+          <ToggleHide disabled={!user.name} />
+        </span>
+      </span>
+      {status === 'unauthenticated' &&
+        <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
+          <SpotifyLoginJSX />
+        </span>
+      }
+      {status === 'authenticated' && !hideSettings &&
+        <span className="absolute bottom-4 left-4">
           <span className="flex flex-row gap-4">
-            {!hideSettings && <FullScreenView />}
-            <ToggleHide disabled={!user.name} />
+            <UserProfileJSX />
+            <SettingsJSX />
           </span>
         </span>
-        {status === 'unauthenticated' &&
-          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0  bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
-            <SpotifyLoginJSX />
-          </span>
-        }
-        {status === 'authenticated' && !hideSettings &&
-          <span className="absolute bottom-4 left-4">
-            <span className="flex flex-row gap-4">
-              <UserProfileJSX />
-              <SettingsJSX />
-            </span>
-          </span>
-        }
-        {!hideSettings &&
-          (
-            <>
-              <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
-                <AudioNoiseControls disabled={!user.name} />
-              </span>
-              <span className={!user.name ? 'hidden lg:block' : 'block'}>
-                {/* handleClickOutSide */}
-                <SpotifyEmbeadJSX
-                  playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList :
-                    'https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator'}
-                  disabled={!user.name}
-                />
-              </span>
-            </>
-          )}
-        <span className=" absolute top-4 left-4">
-          <ClockCard hide={hideTime} references={ref} />
+      }
+      <>
+        <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
+          <AudioNoiseControls
+            disabled={!user.name}
+            hide={hideSettings}
+          />
         </span>
-        <span className={`absolute left-4 ${hideTime ? 'top-4' : 'top-48'}`}>
-          <QuoteCard hide={hideQuote} references={ref} />
+        <span className={!user.name || hideSettings ? 'hidden ' : 'block'}>
+          <SpotifyEmbeadJSX
+            playlistLink={currentPlayList && currentPlayList.length > 0 ? currentPlayList :
+              'https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator'}
+            disabled={!user.name}
+            hideIcon={hideSettings}
+          />
         </span>
-      </div >
-    )
-  }
+      </>
+      <span className=" absolute top-4 left-4">
+        <ClockCard hide={hideTime} references={ref} />
+      </span>
+      <span className={`absolute left-4 ${hideTime ? 'top-4' : 'top-48'}`}>
+        <QuoteCard hide={hideQuote} references={ref} />
+      </span>
+    </div>
+  );
 
   const showLoader = status === 'loading' || videoLoading
 
