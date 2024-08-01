@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
 import AddNewPlayList from "./AddNewPlayList"
-import { animationClass, tooltipClass } from "@/lib/utils"
+import { animationClass } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import classNames from "classnames"
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -46,6 +47,10 @@ const SettingsJSX = () => {
   //     document.removeEventListener('mousedown', handleClickOutSide);
   //   };
   // }, []);
+
+  const tooltipClass = classNames({
+    "font-base text-xs bg-black/70 border-none backdrop-blur-sm m-2 text-white": true
+  })
 
   return (
     <div ref={stateRef} className="z-40">

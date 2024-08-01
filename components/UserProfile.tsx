@@ -18,7 +18,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { tooltipClass } from '@/lib/utils'
+import classNames from 'classnames'
 
 const UserProfileJSX = () => {
     const user = useAppStore(state => state.user)
@@ -28,6 +28,11 @@ const UserProfileJSX = () => {
         signOut();
         setUser({ name: '', email: '' });
     }
+
+    const tooltipClass = classNames({
+        "font-base text-xs bg-black/70 border-none backdrop-blur-sm m-2 text-white": true
+    })
+    
     return (
         <TooltipProvider delayDuration={100}>
             <DropdownMenu>

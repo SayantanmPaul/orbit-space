@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Bird, CloudRainWind, FlameKindling, Pause, Play, SlidersVertical, Trees, Waves, Zap, ZapOff } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { animationClass, tooltipClass } from '@/lib/utils';
+import { animationClass } from '@/lib/utils';
 import { Button } from './ui/button';
 import { useAppStore } from '@/(store)/App';
 import { TbWindmill } from "react-icons/tb";
@@ -11,6 +11,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import classNames from 'classnames';
 
 export const audioSource = [
     {
@@ -100,6 +101,10 @@ const AudioNoiseControls = ({ disabled, hide }: { disabled?: boolean, hide?: boo
         const newVolume = parseFloat(event.target.value);
         setBackgroundVolumes(newVolume, index);
     };
+
+    const tooltipClass = classNames({
+        "font-base text-xs bg-black/70 border-none backdrop-blur-sm m-2 text-white": true
+    })
 
     return (
         <TooltipProvider delayDuration={200}>

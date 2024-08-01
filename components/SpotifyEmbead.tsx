@@ -7,7 +7,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { tooltipClass } from '@/lib/utils'
+import classNames from 'classnames';
 
 const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
     {
@@ -41,6 +41,9 @@ const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
         };
     });
 
+    const tooltipClass = classNames({
+        "font-base text-xs bg-black/70 border-none backdrop-blur-sm m-2 text-white": true
+    })
 
     return (
         <TooltipProvider delayDuration={100}>
