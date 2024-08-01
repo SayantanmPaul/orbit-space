@@ -25,7 +25,7 @@ const ClockCard = ({ references, hide }: { references: any, hide?: boolean }) =>
             whileDrag={{ scale: 1.05 }}
             dragElastic={0.5}
             style={{ touchAction: "none" }}
-            className={`p-8 w-72 rounded-lg bg-black bg-opacity-40 flex flex-col items-center justify-center backdrop-blur-md backdrop-filter cursor-grab ${hide ? 'opacity-0 cursor-auto ' : 'opacity-100 '}`}
+            className={`p-8 w-72 rounded-lg bg-black bg-opacity-40 flex flex-col items-center justify-center backdrop-blur-md backdrop-filter cursor-grab ${hide ? 'hidden' : 'block '}`}
         >
             <div className="flex items-center justify-center">
                 <span className="text-sm font-semibold flex items-baseline justify-center gap-3 font-oswald text-white">

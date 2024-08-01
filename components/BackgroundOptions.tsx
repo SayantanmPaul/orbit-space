@@ -8,7 +8,11 @@ import { Button } from "./ui/button";
 export const localVideoSource = [
   "/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4",
   "/lofi/steam-autumn-sale-2024-moewalls-com.mp4",
+  "/lofi/shou-relaxing-flower-field-the-secret-world-of-arrietty-moewalls-com (1).mp4",
   "/lofi/lofi-boy-chilling-with-cat-moewalls-com.mp4",
+  "/lofi/lofi-furries-night-camping-moewalls-com (1).mp4",
+  "/lofi/lofi-girl.mp4",
+  "/lofi/train-station-rainy-day-moewalls-com (1).mp4",
 ]
 
 const WallpaperSelection = () => {

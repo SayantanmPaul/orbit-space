@@ -34,7 +34,7 @@ const QuoteCard = ({ references, hide }: { references: any, hide?: boolean }) =>
             whileDrag={{ scale: 1.02 }}
             dragElastic={0.1}
             style={{ touchAction: "none" }}
-            className={`w-[336px] max-w-md rounded-lg backdrop-blur-lg bg-black/40 flex flex-col items-start p-8 relative cursor-grab ${hide && 'opacity-0 cursor-none'}`}>
+            className={`w-[336px] max-w-md rounded-lg backdrop-blur-lg bg-black/40 flex flex-col items-start p-8 relative cursor-grab ${hide ? 'hidden' : 'block '}`}>
             <div className='space-y-3 w-full'>
                 <QuoteIcon className="w-8 h-8 text-primary-foreground" />
                 {!loading ? (

@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { PopoverContent } from '@radix-ui/react-popover'
-import { BookOpen, Clock2, Earth, ListMusic, Quote, Settings } from 'lucide-react'
+import { BookOpen, Clock2, Earth, ListMusic, Palette, Quote, Settings } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
@@ -16,6 +16,7 @@ import {
 } from "./ui/dropdown-menu"
 import { useAppStore } from "@/(store)/App"
 import WallpaperSelection from "./BackgroundOptions"
+import ThemeSelectionJSX from "./ThemeSelection"
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -41,7 +42,7 @@ const SettingsJSX = () => {
   // }, []);
 
   return (
-    <div ref={stateRef}>
+    <div ref={stateRef} className="z-40">
       <ToggleGroup type='multiple' className='bg-black/30 backdrop-blur-lg rounded-lg p-1 shadow'>
         <Toggle
           onClick={() => setIsOpen(!isOpen)}
@@ -56,9 +57,9 @@ const SettingsJSX = () => {
         </Toggle>
         {isOpen &&
           <>
-          {/* popover for wallpapaer selection */}
+            {/* popover for wallpapaer selection */}
             <Popover>
-              <PopoverTrigger className="w-10 h-10 items-center justify-center flex" asChild>
+              <PopoverTrigger className="w-10 h-10 items-center justify-center flex cursor-pointer" asChild>
                 <div className='group hover:bg-black/30 rounded-lg'>
                   <Earth
                     size={18}
@@ -69,10 +70,10 @@ const SettingsJSX = () => {
               <PopoverContent className={animationClass}>
                 <WallpaperSelection />
               </PopoverContent>
-          </Popover>
-          {/* popover for custom playlist form */}
+            </Popover>
+            {/* popover for custom playlist form */}
             <Popover>
-              <PopoverTrigger className="w-10 h-10 items-center justify-center flex" asChild>
+              <PopoverTrigger className="w-10 h-10 items-center justify-center flex cursor-pointer" asChild>
                 <div className='group hover:bg-black/30 rounded-lg'>
                   <ListMusic
                     size={18}
@@ -85,8 +86,8 @@ const SettingsJSX = () => {
                   <AddNewPlayList />
                 </div>
               </PopoverContent>
-          </Popover>
-          {/* dropdown for show/hide clockcard and quotecard view */}
+            </Popover>
+            {/* dropdown for show/hide clockcard and quotecard view */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className='rounded-lg group w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-black/20'>
@@ -109,6 +110,22 @@ const SettingsJSX = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            {/* theme selection popover */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className='group hover:bg-black/30 rounded-lg w-10 h-10 flex items-center justify-center cursor-pointer'>
+                  <Palette
+                    size={18}
+                    className='text-white group-hover:scale-110 duration-300'
+                  />
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className={`bg-black/40 backdrop-blur-xl rounded-lg shadow-lg m-4 pl-0 dark ${animationClass}`}>
+                <div>
+                  <ThemeSelectionJSX />
+                </div>
+              </PopoverContent>
+            </Popover>
           </>
         }
       </ToggleGroup>
