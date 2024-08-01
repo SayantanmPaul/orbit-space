@@ -7,9 +7,11 @@ const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
     {
         disabled,
         playlistLink = 'https://open.spotify.com/embed/playlist/6ERjveQi38OO1Zi4hO9qCy?utm_source=generator&theme=0',
+        hideIcon
     }: {
         disabled?: boolean,
-        playlistLink?: string 
+        playlistLink?: string,
+        hideIcon?: boolean
     }) {
     const hide = useAppStore(state => state.hideCard);
     const setHide = useAppStore(state => state.setHideCard);
@@ -35,11 +37,11 @@ const SpotifyEmbedJSX = React.memo(function SpotifyEmbedJSX(
 
 
     return (
-        <div ref={stateRef} className='w-full h-full'>
+        <div>
             <Button
                 disabled={disabled}
                 onClick={handleButtonClick}
-                className='absolute bottom-4 lg:right-36 right-4 bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20'>
+                className={`absolute bottom-4 lg:right-36 right-4 bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20 ${hideIcon ? 'hidden' : 'block'}`}>
                 <AiFillSpotify size={20} className='text-white group-hover:scale-110 duration-300 min-w-6 min-h-6 ' />
             </Button>
             {!disabled &&
