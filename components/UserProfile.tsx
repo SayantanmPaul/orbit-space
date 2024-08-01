@@ -26,7 +26,7 @@ const UserProfileJSX = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <span className=' bg-black/40 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer '>
-                    <CircleUserRound size={20} className='text-white group-hover:scale-110 duration-300 min-w-5 min-h-5' />
+                    <CircleUserRound size={20} className='text-white group-hover:scale-110 duration-300 w-5 h-5' />
                 </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 bg-black/40 backdrop-blur-xl shadow-lg dark mx-4">

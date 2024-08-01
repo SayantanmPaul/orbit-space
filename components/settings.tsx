@@ -56,6 +56,7 @@ const SettingsJSX = () => {
         </Toggle>
         {isOpen &&
           <>
+          {/* popover for wallpapaer selection */}
             <Popover>
               <PopoverTrigger className="w-10 h-10 items-center justify-center flex" asChild>
                 <div className='group hover:bg-black/30 rounded-lg'>
@@ -68,7 +69,8 @@ const SettingsJSX = () => {
               <PopoverContent className={animationClass}>
                 <WallpaperSelection />
               </PopoverContent>
-            </Popover>
+          </Popover>
+          {/* popover for custom playlist form */}
             <Popover>
               <PopoverTrigger className="w-10 h-10 items-center justify-center flex" asChild>
                 <div className='group hover:bg-black/30 rounded-lg'>
@@ -83,7 +85,8 @@ const SettingsJSX = () => {
                   <AddNewPlayList />
                 </div>
               </PopoverContent>
-            </Popover>
+          </Popover>
+          {/* dropdown for show/hide clockcard and quotecard view */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className='rounded-lg group w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-black/20'>
