@@ -25,6 +25,7 @@ interface StoreState {
 
   backgroundVolumes: number[],
   setBackgroundVolumes: (index: number, volume: number) => void,
+  setBackgroundVolumesFromTheme: (volume: number[]) => void
 
   isPlayingBgAudio: boolean,
   setIsPlayingBgAudio: (play: boolean) => void,
@@ -42,6 +43,9 @@ interface StoreState {
   setVideoSources: (sources: string[]) => void,
   isUploaded: boolean[],
   setIsUploaded: (uploaded: boolean[]) => void,
+
+  seletedTheme: string,
+  setSeletedTheme: (src: string) => void,
 }
 export const useAppStore = create<StoreState>()(
   persist(
@@ -57,6 +61,7 @@ export const useAppStore = create<StoreState>()(
       hideAllSettings: false,
       videoSources: localVideoSource.map((videoURl) => videoURl),
       isUploaded: localVideoSource.map(() => false),
+      seletedTheme: '',
 
       setSource: (src: string) => {
         set({ source: src })
@@ -86,6 +91,9 @@ export const useAppStore = create<StoreState>()(
           return { backgroundVolumes: currentVolumes };
         });
       },
+      setBackgroundVolumesFromTheme: (volumes: number[]) => {
+        set({ backgroundVolumes: volumes });
+      },
 
       setIsPlayingBgAudio: (play: boolean) => {
         set({ isPlayingBgAudio: play });
@@ -96,6 +104,10 @@ export const useAppStore = create<StoreState>()(
       },
       setIsUploaded: (uploaded: boolean[]) => {
         set({ isUploaded: uploaded });
+      },
+
+      setSeletedTheme: (src: string) => {
+        set({ seletedTheme: src })
       },
 
       getSource: () => get().source,
