@@ -86,7 +86,7 @@ export const useAppStore = create<StoreState>()(
       },
       setBackgroundVolumes: (volume: number, index: number) => {
         set((state) => {
-          const currentVolumes = Array.isArray(state.backgroundVolumes) ? [...state.backgroundVolumes] : [];
+          const currentVolumes = [...state.backgroundVolumes];
           currentVolumes[index] = volume;
           return { backgroundVolumes: currentVolumes };
         });

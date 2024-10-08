@@ -6,11 +6,10 @@ import { motion, useDragControls } from 'framer-motion'
 const QuoteCard = ({ references, hide }: { references: any, hide?: boolean }) => {
     const [quote, setQuote] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
-    // const [constraints, setConstraints] = useState({ left: 0, right: 0, top: 0, bottom: 0 });
 
     useEffect(() => {
         getQuote();
-    }, []);
+    },[]);
 
     // generate any random quote
     const getQuote = async () => {

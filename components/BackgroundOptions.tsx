@@ -16,17 +16,11 @@ export const localVideoSource = [
 ]
 
 const WallpaperSelection = () => {
-  const setSource = useAppStore(state => state.setSource)
-  const source = useAppStore(state => state.source)
 
-  const [videoSources, setVideoSources] = useState<string[]>([...localVideoSource])
+  const {source, setSource, isUploaded, setIsUploaded, videoSources, setVideoSources } = useAppStore();
+
+  const [videoUrls, setvideoUrls] = useState<string[]>([...localVideoSource]);
   const [loadingStates, setLoadingStates] = useState<boolean[]>(Array(localVideoSource.length).fill(false));
-
-  const setIsUploaded = useAppStore(state => state.setIsUploaded)
-  const isUploaded = useAppStore(state => state.isUploaded)
-
-  const videoURls = useAppStore((state) => state.videoSources)
-  const setVideoURls = useAppStore((state) => state.setVideoSources)
 
   const handleClick = useCallback((source: string) => {
     setSource(source);
@@ -40,8 +34,8 @@ const WallpaperSelection = () => {
       const updatedIsUploaded = [...isUploaded, true];
       const updatedLoadingStates = [...loadingStates, true];
 
+      setvideoUrls(updatedSources);
       setVideoSources(updatedSources);
-      setVideoURls(updatedSources);
       setIsUploaded(updatedIsUploaded);
       // setSource(videoUrl);
       setLoadingStates(updatedLoadingStates);
@@ -52,13 +46,11 @@ const WallpaperSelection = () => {
     const updatedSources = videoSources.filter((_, i) => i !== index);
     const updatedIsUploaded = isUploaded.filter((_, i) => i !== index);
     const updatedLoadingStates = loadingStates.filter((_, i) => i !== index);
-    if (videoSources[index] === source) {
-      setSource(localVideoSource[0]);
-    }
+    setvideoUrls(updatedSources);
     setVideoSources(updatedSources);
-    setVideoURls(updatedSources);
     setIsUploaded(updatedIsUploaded);
     setLoadingStates(updatedLoadingStates);
+    setSource(videoUrls[1]);
   }
 
   const handleVideoLoaded = (index: number) => {
@@ -67,30 +59,17 @@ const WallpaperSelection = () => {
     setLoadingStates(updatedLoadingStates);
   }
 
-  // useEffect(() => {
-  //   const resetURls = () => {
-  //       setVideoURls([...localVideoSource]),
-  //       setSource('/lofi/lofi-cozy-house-rainy-day-moewalls-com.mp4')
-  //   }
-  //   window.addEventListener('beforeunload' ,resetURls)
-  //   return () => {
-  //     window.removeEventListener('beforeunload', resetURls)
-  //   }
-  // }, [setSource, setVideoURls, isUploaded])
-
   return (
     <ScrollArea className=" z-10 max-h-96 overflow-scroll overflow-x-hidden rounded-lg bg-black/60 ml-4 mb-4 scroll-smooth backdrop-blur-xl">
       <div className="flex flex-col w-max gap-4 p-4 items-center relative ">
-        {videoURls.map((video, i) => (
+        {videoSources.map((video, i) => (
           <div
             onClick={() => handleClick(video)}
             key={i}
             className={`w-full h-full hover:ring-1 hover:ring-yellow-300 rounded-md overflow-hidden duration-300 relative ${video === source && 'ring-1 ring-yellow-300 backdrop-brightness-50'}`}>
             <video
-              autoPlay
-              loop
+              autoPlay={false}
               muted
-              playsInline
               onLoadedData={() => handleVideoLoaded(i)}
               className={`object-fill w-[360px] max-w-[360px] h-48`}
             >
