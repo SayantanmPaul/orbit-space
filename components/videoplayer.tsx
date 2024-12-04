@@ -35,6 +35,8 @@ const Videoplayer = ({
         height="100%"
         className="react-player"
         controls={false}
+        onBuffer={() => onLoading && onLoading()}
+        onReady={() => onLoaded && onLoaded()}
       />
     </div>
   );

@@ -55,7 +55,7 @@ export default function Page() {
   }, [status, session, setUser]);
 
   useEffect(() => {
-    if (status === "unauthenticated" && !toastShown && !localStorage.getItem("sourceNotification")) {
+    if (status === "unauthenticated" && !toastShown) {
       const toastId = toast(
         <div className="relative">
           <div className="fixed inset-0 bg-black/40 backdrop-blur-lg"></div>
