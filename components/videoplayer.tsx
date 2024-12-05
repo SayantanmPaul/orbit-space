@@ -6,13 +6,9 @@ import dynamic from "next/dynamic";
 const Videoplayer = ({
   source,
   className,
-  onLoading,
-  onLoaded
 }: {
   source: string,
   className?: string,
-  onLoading?: () => void,
-  onLoaded?: () => void
 }) => {
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -35,8 +31,6 @@ const Videoplayer = ({
         height="100%"
         className="react-player"
         controls={false}
-        onBuffer={() => onLoading && onLoading()}
-        onReady={() => onLoaded && onLoaded()}
       />
     </div>
   );

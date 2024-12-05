@@ -1,88 +1,105 @@
 import { audioSource } from "@/components/AudioNoiseControls";
 import { localVideoSource } from "@/components/BackgroundOptions";
-import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 type UserType = {
-  name: string,
-  email: string
-}
+  name: string;
+  email: string;
+};
 interface StoreState {
-  source: string,
-  setSource: (src: string) => void,
-  getSource: () => string,
+  source: string;
+  setSource: (src: string) => void;
+  getSource: () => string;
 
   user: UserType;
-  setUser: (user: UserType) => void,
-  getUser: () => UserType,
+  setUser: (user: UserType) => void;
+  getUser: () => UserType;
 
   hideCard: boolean;
-  setHideCard: (hide: boolean) => void,
+  setHideCard: (hide: boolean) => void;
 
-  playList: string,
-  setPlayList: (src: string) => void,
-  getPlayList: () => string,
+  playList: string;
+  setPlayList: (src: string) => void;
+  getPlayList: () => string;
 
-  backgroundVolumes: number[],
-  setBackgroundVolumes: (index: number, volume: number) => void,
-  setBackgroundVolumesFromTheme: (volume: number[]) => void
+  backgroundVolumes: number[];
+  setBackgroundVolumes: (index: number, volume: number) => void;
+  setBackgroundVolumesFromTheme: (volume: number[]) => void;
 
-  isPlayingBgAudio: boolean,
-  setIsPlayingBgAudio: (play: boolean) => void,
+  isPlayingBgAudio: boolean;
+  setIsPlayingBgAudio: (play: boolean) => void;
 
-  hideTime: boolean,
-  setHideTime: (hide: boolean) => void
+  hideTime: boolean;
+  setHideTime: (hide: boolean) => void;
 
-  hideQuote: boolean,
-  setHideQuote: (hide: boolean) => void,
+  hideQuote: boolean;
+  setHideQuote: (hide: boolean) => void;
 
-  hideAllSettings: boolean,
-  setHideAllSettings: (hide: boolean) => void,
+  hideAllSettings: boolean;
+  setHideAllSettings: (hide: boolean) => void;
 
-  videoSources: string[],
-  setVideoSources: (sources: string[]) => void,
-  isUploaded: boolean[],
-  setIsUploaded: (uploaded: boolean[]) => void,
+  hidePromodoroTimer: boolean;
+  setHidePromodoroTimer: (hide: boolean) => void;
 
-  seletedTheme: string,
-  setSeletedTheme: (src: string) => void,
+  videoSources: string[];
+  setVideoSources: (sources: string[]) => void;
+  isUploaded: boolean[];
+  setIsUploaded: (uploaded: boolean[]) => void;
+
+  seletedTheme: string;
+  setSeletedTheme: (src: string) => void;
+
+  pomodoroTime: number;
+  setPomodoroTime: (time: number) => void;
+  shortBreakTime: number;
+  setShortBreakTime: (time: number) => void;
+  longBreakTime: number;
+  setLongBreakTime: (time: number) => void;
 }
 export const useAppStore = create<StoreState>()(
   persist(
     (set, get) => ({
-      source: '',
-      user: { name: '', email: '' },
+      source: "",
+      user: { name: "", email: "" },
       hideCard: false,
-      playList: '',
+      playList: "",
       backgroundVolumes: audioSource.map((source) => source.initialVolume),
       isPlayingBgAudio: false,
       hideTime: true,
       hideQuote: true,
       hideAllSettings: false,
+      hidePromodoroTimer: true,
       videoSources: localVideoSource.map((videoURl) => videoURl),
       isUploaded: localVideoSource.map(() => false),
-      seletedTheme: '',
+      seletedTheme: "",
+      pomodoroTime: 25,
+      shortBreakTime: 5,
+      longBreakTime: 12,
 
       setSource: (src: string) => {
-        set({ source: src })
+        set({ source: src });
       },
       setUser: (user: UserType) => {
-        set({ user })
+        set({ user });
       },
       setHideCard: (hide: boolean) => {
-        set({ hideCard: hide })
+        set({ hideCard: hide });
       },
       setHideTime: (hide: boolean) => {
-        set({ hideTime: hide })
+        set({ hideTime: hide });
       },
       setHideQuote: (hide: boolean) => {
-        set({ hideQuote: hide })
+        set({ hideQuote: hide });
       },
       setPlayList: (link: string) => {
-        set({ playList: link })
+        set({ playList: link });
       },
       setHideAllSettings: (hide) => {
-        set({ hideAllSettings: hide })
+        set({ hideAllSettings: hide });
+      },
+      setHidePromodoroTimer(hide) {
+        set({ hidePromodoroTimer: hide });
       },
       setBackgroundVolumes: (volume: number, index: number) => {
         set((state) => {
@@ -107,7 +124,17 @@ export const useAppStore = create<StoreState>()(
       },
 
       setSeletedTheme: (src: string) => {
-        set({ seletedTheme: src })
+        set({ seletedTheme: src });
+      },
+
+      setPomodoroTime: (time: number) => {
+        set({ pomodoroTime: time });
+      },
+      setShortBreakTime: (time: number) => {
+        set({ shortBreakTime: time })
+      },
+      setLongBreakTime: (time: number) => {
+        set({ longBreakTime: time })
       },
 
       getSource: () => get().source,
@@ -120,4 +147,4 @@ export const useAppStore = create<StoreState>()(
       storage: createJSONStorage(() => localStorage),
     }
   )
-)
+);
