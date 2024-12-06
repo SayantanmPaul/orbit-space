@@ -1,20 +1,20 @@
-import { BrainIcon, CoffeeIcon, FastForwardIcon, Gamepad2Icon, PauseIcon, PlayIcon, Settings2Icon, Ticket } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
 import { useAppStore } from '@/(store)/App';
-import { motion, useDragControls } from 'framer-motion'
+import { motion } from 'framer-motion';
+import { Howl } from 'howler';
+import {
+    BrainIcon,
+    CoffeeIcon,
+    FastForwardIcon,
+    Gamepad2Icon,
+    PauseIcon,
+    PlayIcon
+} from 'lucide-react';
+import { darken, lighten } from 'polished';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { Button } from '../ui/button';
+import SettingsDialog from './SettingsDialog';
 
 const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }) => {
 
@@ -26,13 +26,15 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
     const isPausedRef = useRef(isPaused);
     const modeRef = useRef(mode);
 
-    const { pomodoroTime, setPomodoroTime, shortBreakTime, setShortBreakTime, longBreakTime, setLongBreakTime } = useAppStore((state) => ({
+    const { pomodoroTime, setPomodoroTime, shortBreakTime, setShortBreakTime, longBreakTime, setLongBreakTime, selectedTimerColor, clockFace } = useAppStore((state) => ({
         pomodoroTime: state.pomodoroTime,
         setPomodoroTime: state.setPomodoroTime,
         shortBreakTime: state.shortBreakTime,
         setShortBreakTime: state.setShortBreakTime,
         longBreakTime: state.longBreakTime,
-        setLongBreakTime: state.setLongBreakTime
+        setLongBreakTime: state.setLongBreakTime,
+        selectedTimerColor: state.selectedTimerColor,
+        clockFace: state.clockFace
     }))
 
     const stopTimer = () => {
@@ -57,6 +59,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
 
         stopTimer();
 
+
         // Switch mode and reset the timer
         setMode(nextMode);
         setSecondsLeft(nextSeconds);
@@ -69,7 +72,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
             secondsLeftRef.current--;
             setSecondsLeft(secondsLeftRef.current);
         } else {
-            switchMode();
+            switchMode();   
         }
     }, [switchMode]);
 
@@ -106,85 +109,30 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
         .padStart(2, '0');
     const seconds = (secondsLeft % 60).toString().padStart(2, '0');
 
-    const SettingsDialog = () => {
-        return (
-            <Dialog>
-                <DialogTrigger asChild >
-                    <Button onClick={() => stopTimer()} className='bg-red-50/10 px-4 py-6 rounded-2xl'>
-                        <Settings2Icon className="h-5 w-5 text-red-50" />
-                    </Button>
-                </DialogTrigger>
-                <DialogContent
-                    className="bg-black/30 backdrop-blur-lg border border-white/10 text-white max-w-md"
-                >
-                    <DialogHeader>
-                        <DialogTitle className="font-base">Settings</DialogTitle>
-                        <DialogDescription></DialogDescription>
-                    </DialogHeader>
-                    <div className="flex items-center gap-4">
-                        <div className="flex w-full items-center gap-3">
-                            <span className="flex flex-col gap-1">
-                                <Label className="font-base text-xs text-slate-300 font-medium">
-                                    Pomodoro
-                                </Label>
-                                <Input
-                                    className="bg-black/10 border-white/10"
-                                    value={pomodoroTime}
-                                    autoFocus
-                                    id="pomodoro"
-                                    type="number"
-                                    min={5}
-                                    onChange={((e) => {
-                                        e.stopPropagation();
-                                        setPomodoroTime(Number(e.target.value));
-                                    })}
-                                />
-                            </span>
-                            <span className="flex flex-col gap-1">
-                                <Label htmlFor="short-break" className="font-base text-xs text-slate-300 font-medium">
-                                    Short Break
-                                </Label>
-                                <Input
-                                    className="bg-black/10 border-white/10"
-                                    type="number"
-                                    id="short-break"
-                                    defaultValue={shortBreakTime}
-                                    onChange={(e) => {
-                                        e.stopPropagation();
-                                        setShortBreakTime(Number(e.target.value));
-                                    }}
-                                />
-                            </span>
-                            <span className="flex flex-col gap-1">
-                                <Label htmlFor="long-break" className="font-base text-xs text-slate-300 font-medium">
-                                    Long Break
-                                </Label>
-                                <Input
-                                    className="bg-black/10 border-white/10"
-                                    type="number"
-                                    id="long-break"
-                                    defaultValue={longBreakTime}
-                                    onChange={(e) => {
-                                        e.stopPropagation();
-                                        setLongBreakTime(Number(e.target.value));
-                                    }}
-                                />
-                            </span>
-                        </div>
-                    </div>
-                    <span className="flex justify-between w-full items-center">
-                        <Label className="font-base text-slate-300 font-medium">Color</Label>
-                        <div className="flex gap-3">
-                            <span className="bg-[#f43f5e] hover:bg-rose-600 w-8 h-8 rounded-full"></span>
-                            <span className="bg-[#22c55e] hover:bg-green-600 w-8 h-8 rounded-full"></span>
-                            <span className="bg-[#60a5fa] hover:bg-blue-500 w-8 h-8 rounded-full"></span>
-                        </div>
-                    </span>
-                    <Button className="bg-red-50/10 hover:bg-black/30 rounded-md">Apply Changes</Button>
-                </DialogContent>
-            </Dialog>
-        )
+    const darkenColor = (color: string, amount: number) => {
+        return darken(amount, color);
     }
+    const lightenColor = (color: string, amount: number) => {
+        return lighten(amount, color);
+    }
+
+    const sounds = {
+        start: new Howl({ src: ['/timer-sound/timer-sound.mp3'] }),
+        complete: new Howl({ src: ['/timer-sound/alarm-clock.mp3'] }),
+    };
+
+    const handlePlayPause = () => {
+        setIsPaused(!isPaused);
+        if (isPaused) {
+            sounds.start.play();
+        }
+    };
+
+    useEffect(() => {
+        if (secondsLeft === 0 && !isPaused) {
+            sounds.complete.play();
+        }
+    }, [secondsLeft, isPaused, sounds.complete]);
 
     if (isHidden) return;
     return (
@@ -195,7 +143,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
             dragElastic={0.1}
             style={{ touchAction: "none" }}
             className='bg-black/30 backdrop-blur-lg rounded-lg p-6 shadow flex flex-col items-center gap-3 border border-white/10'>
-            <div className={`flex items-center text-red-50 border rounded-3xl px-4 py-2 select-none ${mode === 'pomodoro' ? 'border-rose-300 text-rose-300' : mode === 'shortBreak' ? 'border-green-300 text-green-300' : 'border-blue-300 text-blue-300'}`}>
+            <div style={{ borderColor: lightenColor(selectedTimerColor, 0.2), color: lightenColor(selectedTimerColor, 0.2) }} className={`flex items-center border rounded-3xl px-4 py-2 select-none `}>
                 {
                     mode === 'pomodoro' ? (
                         <>
@@ -220,23 +168,36 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
                     value={percentage}
                     maxValue={100}
                     text={`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
-                    styles={buildStyles({
-                        textColor: '#FFF2F2',
-                        textSize: '24px',
-                        pathColor: mode === 'pomodoro'
-                            ? '#FF4C4C'
-                            : mode === 'shortBreak'
-                                ? '#4DDA6E'
-                                : '#4CACFF',
-                        trailColor: 'rgba(255, 255, 255, 0.2)',
-                    })}
+                    // styles={buildStyles({
+                    //     textColor: '#E5E1DA',
+                    //     textSize: '24px',
+                    //     pathColor: selectedTimerColor,
+                    //     trailColor: 'rgba(255, 255, 255, 0.2)',
+                    // })}
+                    styles={{
+                        root: {},
+                        path: {
+                            stroke: selectedTimerColor,
+                            strokeLinecap: 'round',
+                            transition: 'stroke-dashoffset 0.5s ease 0s',
+                        },
+                        trail: {
+                            stroke: 'rgba(255, 255, 255, 0.2)',
+                        },
+                        text: {
+                            fontFamily: clockFace,
+                            fill: selectedTimerColor,
+                            fontSize: '24px',
+                        }
+                    }}
                 />
             </div>
             <div className='flex items-center gap-2'>
-                <SettingsDialog />
+                <SettingsDialog stopTimer={stopTimer} timerMode={mode} />
                 <Button type='button'
-                    className={` px-6 py-6 rounded-2xl flex items-center ${mode === 'pomodoro' ? 'bg-rose-600 hover:bg-rose-700' : mode === 'shortBreak' ? 'bg-green-600 hover:bg-green-700' : 'bg-indigo-500 hover:bg-indigo-600'}`}
-                    onClick={() => setIsPaused(!isPaused)}
+                    style={{ backgroundColor: darkenColor(selectedTimerColor, 0.1) }}
+                    className={` px-6 py-6 rounded-2xl flex items-center `}
+                    onClick={handlePlayPause}
                 >
                     {isPaused ?
                         <PlayIcon strokeWidth={2.5} className="h-5 w-5 text-red-50" /> :

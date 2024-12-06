@@ -39,24 +39,31 @@ interface StoreState {
   hideAllSettings: boolean;
   setHideAllSettings: (hide: boolean) => void;
 
-  hidePromodoroTimer: boolean;
-  setHidePromodoroTimer: (hide: boolean) => void;
-
+  //video props
   videoSources: string[];
   setVideoSources: (sources: string[]) => void;
   isUploaded: boolean[];
   setIsUploaded: (uploaded: boolean[]) => void;
 
+  //theme props
   seletedTheme: string;
   setSeletedTheme: (src: string) => void;
 
+  //pomodorotimer props
   pomodoroTime: number;
   setPomodoroTime: (time: number) => void;
   shortBreakTime: number;
   setShortBreakTime: (time: number) => void;
   longBreakTime: number;
   setLongBreakTime: (time: number) => void;
+  selectedTimerColor: string;
+  setSelectedTimerColor: (color: string) => void;
+  hidePromodoroTimer: boolean;
+  setHidePromodoroTimer: (hide: boolean) => void;
+  clockFace: string;
+  setClockFace: (face: string) => void;
 }
+
 export const useAppStore = create<StoreState>()(
   persist(
     (set, get) => ({
@@ -76,7 +83,9 @@ export const useAppStore = create<StoreState>()(
       pomodoroTime: 25,
       shortBreakTime: 5,
       longBreakTime: 12,
-
+      selectedTimerColor: 'rgb(217, 22, 86)',
+      clockFace: 'Oswald',
+      
       setSource: (src: string) => {
         set({ source: src });
       },
@@ -135,6 +144,12 @@ export const useAppStore = create<StoreState>()(
       },
       setLongBreakTime: (time: number) => {
         set({ longBreakTime: time })
+      },
+      setSelectedTimerColor: (color: string) => {
+        set({ selectedTimerColor: color })
+      },
+      setClockFace: (face: string) => {
+        set({ clockFace: face })
       },
 
       getSource: () => get().source,

@@ -11,11 +11,12 @@ import SpotifyLoginJSX from "@/components/SpotifyLogin";
 import { ToggleHide } from "@/components/ToggleHideSettings";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
+import { m } from "framer-motion";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useMemo } from "react";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 
 function useInitializeSource(setSource: (source: string) => void) {
   useEffect(() => {
@@ -60,13 +61,13 @@ export default function Page() {
     if (status === "unauthenticated" && !toastShown && !localStorage.getItem("sourceNotification")) {
       const toastId = toast(
         <div className="relative">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-lg"></div>
-          <div className="relative flex flex-col gap-2 p-3 bg-transparent text-white z-10">
+          <div className="fixed inset-0 bg-[#0A97B0] "></div>
+          <div className="relative flex flex-col gap-2 p-3 text-white z-10">
             <div className="flex flex-row gap-2 items-center">
-              <p className="text-sm font-semibold font-base">A Short Note</p>
+              <p className="text-sm font-semibold font-base select-none">A Short Note</p>
               <CircleAlert strokeWidth={3} className="w-4 h-4" />
             </div>
-            <p className="text-[13px] tracking-normal dark">
+            <p className="text-[13px] tracking-normal dark select-none">
               This app does not store your information or uploaded content. Note
               that your content may reset when the cache is cleared.
             </p>
@@ -78,7 +79,7 @@ export default function Page() {
             </button>
           </div>
         </div>,
-        { unstyled: true, style: { background: "transparent" }, duration: Infinity }
+        { duration: 10000, position: "top-left" }
       );
       setToastShown(true);
       localStorage.setItem("sourceNotification", "true");
@@ -152,7 +153,7 @@ export default function Page() {
       <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
         <QuoteCard hide={hideQuote} references={ref} />
       </span>
-      <span className={`absolute ${hideTime ? "top-4" : "bottom-20"} left-4`}>
+      <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
         <Timer isHidden={hidePomodoroCard} references={ref} />
       </span>
     </div>
