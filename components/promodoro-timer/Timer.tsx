@@ -26,7 +26,16 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
     const isPausedRef = useRef(isPaused);
     const modeRef = useRef(mode);
 
-    const { pomodoroTime, setPomodoroTime, shortBreakTime, setShortBreakTime, longBreakTime, setLongBreakTime, selectedTimerColor, clockFace } = useAppStore((state) => ({
+    const {
+        pomodoroTime,
+        setPomodoroTime,
+        shortBreakTime,
+        setShortBreakTime,
+        longBreakTime,
+        setLongBreakTime,
+        selectedTimerColor,
+        clockFace
+    } = useAppStore((state) => ({
         pomodoroTime: state.pomodoroTime,
         setPomodoroTime: state.setPomodoroTime,
         shortBreakTime: state.shortBreakTime,
@@ -43,6 +52,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
         isPausedRef.current = true;
     }
 
+    //switch mode and reset the timer
     const switchMode = useCallback(() => {
         let nextMode: 'pomodoro' | 'shortBreak' | 'longBreak';
         if (modeRef.current === 'pomodoro') {
@@ -67,15 +77,17 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
         secondsLeftRef.current = nextSeconds;
     }, [pomodoroTime, shortBreakTime, longBreakTime]);
 
+    // start the timer
     const tick = useCallback(() => {
         if (secondsLeftRef.current > 0) {
             secondsLeftRef.current--;
             setSecondsLeft(secondsLeftRef.current);
         } else {
-            switchMode();   
+            switchMode();
         }
     }, [switchMode]);
 
+    // initialize the timer
     const initTimer = useCallback(() => {
         const initialSeconds = pomodoroTime * 60;
         setSecondsLeft(initialSeconds);
@@ -109,6 +121,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
         .padStart(2, '0');
     const seconds = (secondsLeft % 60).toString().padStart(2, '0');
 
+    //darken and lighten of the timer dynamic color
     const darkenColor = (color: string, amount: number) => {
         return darken(amount, color);
     }
@@ -116,6 +129,7 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
         return lighten(amount, color);
     }
 
+    // handle play and completeion sound for the timer
     const sounds = {
         start: new Howl({ src: ['/timer-sound/timer-sound.mp3'] }),
         complete: new Howl({ src: ['/timer-sound/alarm-clock.mp3'] }),
@@ -168,12 +182,6 @@ const Timer = ({ references, isHidden }: { references: any, isHidden?: boolean }
                     value={percentage}
                     maxValue={100}
                     text={`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
-                    // styles={buildStyles({
-                    //     textColor: '#E5E1DA',
-                    //     textSize: '24px',
-                    //     pathColor: selectedTimerColor,
-                    //     trailColor: 'rgba(255, 255, 255, 0.2)',
-                    // })}
                     styles={{
                         root: {},
                         path: {

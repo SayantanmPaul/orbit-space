@@ -61,7 +61,7 @@ export default function Page() {
     if (status === "unauthenticated" && !toastShown && !localStorage.getItem("sourceNotification")) {
       const toastId = toast(
         <div className="relative">
-          <div className="fixed inset-0 bg-[#0A97B0] "></div>
+          <div className="fixed inset-0 backdrop-blur bg-[#0A97B0] "></div>
           <div className="relative flex flex-col gap-2 p-3 text-white z-10">
             <div className="flex flex-row gap-2 items-center">
               <p className="text-sm font-semibold font-base select-none">A Short Note</p>
