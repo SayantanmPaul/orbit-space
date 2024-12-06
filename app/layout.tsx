@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SessionProvider from "@/Session/SessionProvider";
-import { Toaster } from "@/components/ui/sonner"
+import toast, { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: {
@@ -64,7 +64,7 @@ export default function RootLayout({
       <body suppressHydrationWarning={true}>
         <SessionProvider>
           {children}
-          <Toaster position="top-left" />
+          <Toaster />
         </SessionProvider>
       </body>
     </html>

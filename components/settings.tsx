@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { PopoverContent } from '@radix-ui/react-popover'
-import { BookOpen, Clock2, Earth, ListMusic, Palette, Quote, Settings } from 'lucide-react'
+import { BookOpen, Clock2, Earth, ListMusic, Palette, Quote, Settings, Timer } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
@@ -11,7 +11,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "./ui/dropdown-menu"
 import { useAppStore } from "@/(store)/App"
@@ -34,6 +33,8 @@ const SettingsJSX = () => {
   const hideTime = useAppStore(state => state.hideTime)
   const setHideQuote = useAppStore(state => state.setHideQuote)
   const hideQuote = useAppStore(state => state.hideQuote)
+  const hidePromodoroTimer = useAppStore(state => state.hidePromodoroTimer)
+  const setHidePromodoroTimer = useAppStore(state => state.setHidePromodoroTimer)
 
   // const handleClickOutSide = (event: MouseEvent) => {
   //   if (stateRef.current && !stateRef.current.contains(event.target as Node)) {
@@ -137,15 +138,20 @@ const SettingsJSX = () => {
                     <Clock2 className="mr-2 h-4 w-4" />
                     {hideTime ? 'Show time' : 'Hide time'}
                     {/* <span>Show time</span> */}
-                    <DropdownMenuShortcut>⌘T</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => setHidePromodoroTimer(!hidePromodoroTimer)}>
+                    <Timer className="mr-2 h-4 w-4" />
+                    {/* <span>Show random quotes</span> */}
+                    {hidePromodoroTimer ? 'Use promodoro timer' : 'Hide promodoro timer'}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => setHideQuote(!hideQuote)}>
                     <Quote className="mr-2 h-4 w-4" />
                     {/* <span>Show random quotes</span> */}
                     {hideQuote ? 'Show random quotes' : 'Hide random quotes'}
-                    <DropdownMenuShortcut>⌘Q</DropdownMenuShortcut>
                   </DropdownMenuItem>
+
                 </DropdownMenuContent>
               </DropdownMenu>
               {/* theme selection popover */}

@@ -3,6 +3,7 @@ import { useAppStore } from "@/(store)/App";
 import AudioNoiseControls from "@/components/AudioNoiseControls";
 import ClockCard from "@/components/ClockCard";
 import FullScreenView from "@/components/FullScreenView";
+import Timer from "@/components/promodoro-timer/Timer";
 import QuoteCard from "@/components/QuoteCard";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
@@ -10,11 +11,12 @@ import SpotifyLoginJSX from "@/components/SpotifyLogin";
 import { ToggleHide } from "@/components/ToggleHideSettings";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
+import { m } from "framer-motion";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useRef, useState, useMemo } from "react";
-import { toast } from "sonner";
+import { toast } from "react-hot-toast";
 
 function useInitializeSource(setSource: (source: string) => void) {
   useEffect(() => {
@@ -28,7 +30,7 @@ function useInitializeSource(setSource: (source: string) => void) {
 export default function Page() {
   const ref = useRef(null);
 
-  const { source, user, playList: currentPlayList, hideTime, hideQuote, hideSettings, setSource, setUser } = useAppStore((state) => ({
+  const { source, user, playList: currentPlayList, hideTime, hideQuote, hideSettings, hidePomodoroCard, setSource, setUser } = useAppStore((state) => ({
     source: state.source,
     user: state.user,
     playList: state.playList,
@@ -37,6 +39,7 @@ export default function Page() {
     hideSettings: state.hideAllSettings,
     setSource: state.setSource,
     setUser: state.setUser,
+    hidePomodoroCard: state.hidePromodoroTimer
   }));
 
   const { data: session, status } = useSession();
@@ -55,16 +58,16 @@ export default function Page() {
   }, [status, session, setUser]);
 
   useEffect(() => {
-    if (status === "unauthenticated" && !toastShown) {
+    if (status === "unauthenticated" && !toastShown && !localStorage.getItem("sourceNotification")) {
       const toastId = toast(
         <div className="relative">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-lg"></div>
-          <div className="relative flex flex-col gap-2 p-3 bg-transparent text-white z-10">
+          <div className="fixed inset-0 backdrop-blur bg-[#0A97B0] "></div>
+          <div className="relative flex flex-col gap-2 p-3 text-white z-10">
             <div className="flex flex-row gap-2 items-center">
-              <p className="text-sm font-semibold font-base">A Short Note</p>
+              <p className="text-sm font-semibold font-base select-none">A Short Note</p>
               <CircleAlert strokeWidth={3} className="w-4 h-4" />
             </div>
-            <p className="text-[13px] tracking-normal dark">
+            <p className="text-[13px] tracking-normal dark select-none">
               This app does not store your information or uploaded content. Note
               that your content may reset when the cache is cleared.
             </p>
@@ -76,7 +79,7 @@ export default function Page() {
             </button>
           </div>
         </div>,
-        { unstyled: true, style: { background: "transparent" }, duration: Infinity }
+        { duration: 10000, position: "top-left" }
       );
       setToastShown(true);
       localStorage.setItem("sourceNotification", "true");
@@ -111,7 +114,7 @@ export default function Page() {
   const ContainerViewJSX = useMemo(() => (
     <div ref={ref} className="w-full h-full overflow-hidden relative" id="container">
       <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
-        <Videoplayer source={source} onLoading={() => setVideoLoading(true)} onLoaded={() => setVideoLoading(false)} />
+        <Videoplayer source={source} />
       </div>
       <span className="absolute top-4 right-4 hidden lg:block md:block">
         <span className="flex flex-row gap-4">
@@ -150,8 +153,11 @@ export default function Page() {
       <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
         <QuoteCard hide={hideQuote} references={ref} />
       </span>
+      <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
+        <Timer isHidden={hidePomodoroCard} references={ref} />
+      </span>
     </div>
-  ), [source, user.name, currentPlayList, hideTime, hideQuote, hideSettings, status]);
+  ), [source, user.name, currentPlayList, hideTime, hideQuote, hideSettings, status, hidePomodoroCard]);
 
   return (
     <div className="w-full max-h-screen overflow-hidden relative">
