@@ -1,6 +1,6 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { PopoverContent } from '@radix-ui/react-popover'
-import { BookOpen, Clock2, Earth, ListMusic, Palette, Quote, Settings, Timer } from 'lucide-react'
+import { BookOpen, Clock2, Earth, ListMusic, NotebookPenIcon, Palette, Quote, Settings, Timer } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Popover, PopoverTrigger } from './ui/popover'
 import { Toggle } from './ui/toggle'
@@ -23,18 +23,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import classNames from "classnames"
+import NoteDialog from "./sticky-notes/NoteDialog"
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
   const stateRef = useRef<HTMLDivElement | null>(null)
 
-  //hide clock and quotes
-  const setHideTime = useAppStore(state => state.setHideTime)
-  const hideTime = useAppStore(state => state.hideTime)
-  const setHideQuote = useAppStore(state => state.setHideQuote)
-  const hideQuote = useAppStore(state => state.hideQuote)
-  const hidePromodoroTimer = useAppStore(state => state.hidePromodoroTimer)
-  const setHidePromodoroTimer = useAppStore(state => state.setHidePromodoroTimer)
+  const { hideTime, setHideTime, hideQuote, setHideQuote, hidePromodoroTimer, setHidePromodoroTimer, isNoteDialogOpen, setIsNoteDialogOpen } = useAppStore();
 
   // const handleClickOutSide = (event: MouseEvent) => {
   //   if (stateRef.current && !stateRef.current.contains(event.target as Node)) {
@@ -151,9 +146,22 @@ const SettingsJSX = () => {
                     {/* <span>Show random quotes</span> */}
                     {hideQuote ? 'Show random quotes' : 'Hide random quotes'}
                   </DropdownMenuItem>
-
                 </DropdownMenuContent>
               </DropdownMenu>
+              {/* sticky notes */}
+              <Popover>
+                <Tooltip>
+                  <TooltipTrigger asChild >
+                  <NoteDialog
+                      isOpen={isNoteDialogOpen}
+                      setIsOpen={setIsNoteDialogOpen}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent className={tooltipClass}>
+                    Add notes
+                  </TooltipContent>
+                </Tooltip>
+              </Popover>
               {/* theme selection popover */}
               <Popover>
                 <Tooltip>
