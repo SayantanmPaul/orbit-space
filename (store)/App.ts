@@ -7,6 +7,12 @@ type UserType = {
   name: string;
   email: string;
 };
+interface NoteType {
+  id: number;
+  text: string;
+  position?: { x: number; y: number };
+}
+
 interface StoreState {
   source: string;
   setSource: (src: string) => void;
@@ -62,6 +68,14 @@ interface StoreState {
   setHidePromodoroTimer: (hide: boolean) => void;
   clockFace: string;
   setClockFace: (face: string) => void;
+
+  stickyNotes: NoteType[];
+  setStickyNotes: (notes: NoteType[]) => void;
+  addStickyNote: (note: NoteType) => void;
+  deleteStickyNote: (id: number) => void;
+  editStickyNote: (id: number, content: string) => void;
+  isNoteDialogOpen: boolean;
+  setIsNoteDialogOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<StoreState>()(
@@ -83,9 +97,11 @@ export const useAppStore = create<StoreState>()(
       pomodoroTime: 25,
       shortBreakTime: 5,
       longBreakTime: 12,
-      selectedTimerColor: 'rgb(217, 22, 86)',
-      clockFace: 'Oswald',
-      
+      selectedTimerColor: "rgb(217, 22, 86)",
+      clockFace: "Oswald",
+      stickyNotes: [],
+      isNoteDialogOpen: false,
+
       setSource: (src: string) => {
         set({ source: src });
       },
@@ -140,16 +156,47 @@ export const useAppStore = create<StoreState>()(
         set({ pomodoroTime: time });
       },
       setShortBreakTime: (time: number) => {
-        set({ shortBreakTime: time })
+        set({ shortBreakTime: time });
       },
       setLongBreakTime: (time: number) => {
-        set({ longBreakTime: time })
+        set({ longBreakTime: time });
       },
       setSelectedTimerColor: (color: string) => {
-        set({ selectedTimerColor: color })
+        set({ selectedTimerColor: color });
       },
       setClockFace: (face: string) => {
-        set({ clockFace: face })
+        set({ clockFace: face });
+      },
+
+      setStickyNotes(notes) {
+        set({ stickyNotes: notes });
+      },
+      addStickyNote(note: NoteType) {
+        set((state) => ({
+          stickyNotes: [...state.stickyNotes, note],
+        }));
+      },
+      deleteStickyNote(id) {
+        set((state) => ({
+          stickyNotes: state.stickyNotes.filter((note) => note.id !== id),
+        }));
+      },
+      editStickyNote(id, newText) {
+        set((state) => {
+          const noteExists = state.stickyNotes.some((n) => n.id === id);
+          if (noteExists) {
+            return {
+              stickyNotes: state.stickyNotes.map((n) =>
+                n.id === id ? { ...n, text: newText } : n
+              ),
+            };
+          }
+          console.error(`Note with id ${id} not found`);
+          return state;
+        });
+      },
+      setIsNoteDialogOpen(state: boolean) {
+        set({ isNoteDialogOpen: state });
       },
 
       getSource: () => get().source,

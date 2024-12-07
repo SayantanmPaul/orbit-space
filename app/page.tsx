@@ -8,15 +8,16 @@ import QuoteCard from "@/components/QuoteCard";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX from "@/components/SpotifyLogin";
+import StickyNotes from "@/components/sticky-notes/StickyNotes";
 import { ToggleHide } from "@/components/ToggleHideSettings";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
-import { m } from "framer-motion";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import { set } from "zod";
 
 function useInitializeSource(setSource: (source: string) => void) {
   useEffect(() => {
@@ -27,10 +28,23 @@ function useInitializeSource(setSource: (source: string) => void) {
   }, [setSource]);
 }
 
+
 export default function Page() {
   const ref = useRef(null);
 
-  const { source, user, playList: currentPlayList, hideTime, hideQuote, hideSettings, hidePomodoroCard, setSource, setUser } = useAppStore((state) => ({
+  const {
+    source,
+    user,
+    playList: currentPlayList,
+    hideTime,
+    hideQuote,
+    hideSettings,
+    hidePomodoroCard,
+    setSource,
+    setUser,
+    notes,
+    setNotes
+  } = useAppStore((state) => ({
     source: state.source,
     user: state.user,
     playList: state.playList,
@@ -39,7 +53,9 @@ export default function Page() {
     hideSettings: state.hideAllSettings,
     setSource: state.setSource,
     setUser: state.setUser,
-    hidePomodoroCard: state.hidePromodoroTimer
+    hidePomodoroCard: state.hidePromodoroTimer,
+    notes: state.stickyNotes,
+    setNotes: state.setStickyNotes
   }));
 
   const { data: session, status } = useSession();
@@ -156,8 +172,11 @@ export default function Page() {
       <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
         <Timer isHidden={hidePomodoroCard} references={ref} />
       </span>
+      <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
+        <StickyNotes notes={notes} setNotes={setNotes} containerRef={ref} />
+      </span>
     </div>
-  ), [source, user.name, currentPlayList, hideTime, hideQuote, hideSettings, status, hidePomodoroCard]);
+  ), [source, user.name, currentPlayList, hideTime, hideQuote, hideSettings, status, hidePomodoroCard, notes, setNotes]);
 
   return (
     <div className="w-full max-h-screen overflow-hidden relative">
