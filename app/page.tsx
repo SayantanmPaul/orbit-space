@@ -5,6 +5,7 @@ import ClockCard from "@/components/ClockCard";
 import FullScreenView from "@/components/FullScreenView";
 import Timer from "@/components/promodoro-timer/Timer";
 import QuoteCard from "@/components/QuoteCard";
+import RestrictedPage from "@/components/RestrictedPage";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX from "@/components/SpotifyLogin";
@@ -12,6 +13,7 @@ import StickyNotes from "@/components/sticky-notes/StickyNotes";
 import { ToggleHide } from "@/components/ToggleHideSettings";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
+import useMatchMediaHook from "@/hooks/MatchMediaHook";
 import { CircleAlert, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -28,7 +30,6 @@ function useInitializeSource(setSource: (source: string) => void) {
   }, [setSource]);
 }
 
-
 export default function Page() {
   const ref = useRef(null);
 
@@ -43,7 +44,7 @@ export default function Page() {
     setSource,
     setUser,
     notes,
-    setNotes
+    setNotes,
   } = useAppStore((state) => ({
     source: state.source,
     user: state.user,
@@ -55,7 +56,7 @@ export default function Page() {
     setUser: state.setUser,
     hidePomodoroCard: state.hidePromodoroTimer,
     notes: state.stickyNotes,
-    setNotes: state.setStickyNotes
+    setNotes: state.setStickyNotes,
   }));
 
   const { data: session, status } = useSession();
@@ -74,13 +75,19 @@ export default function Page() {
   }, [status, session, setUser]);
 
   useEffect(() => {
-    if (status === "unauthenticated" && !toastShown && !localStorage.getItem("sourceNotification")) {
+    if (
+      status === "unauthenticated" &&
+      !toastShown &&
+      !localStorage.getItem("sourceNotification")
+    ) {
       const toastId = toast(
         <div className="relative">
           <div className="fixed inset-0 backdrop-blur bg-[#0A97B0] "></div>
           <div className="relative flex flex-col gap-2 p-3 text-white z-10">
             <div className="flex flex-row gap-2 items-center">
-              <p className="text-sm font-semibold font-base select-none">A Short Note</p>
+              <p className="text-sm font-semibold font-base select-none">
+                A Short Note
+              </p>
               <CircleAlert strokeWidth={3} className="w-4 h-4" />
             </div>
             <p className="text-[13px] tracking-normal dark select-none">
@@ -102,85 +109,143 @@ export default function Page() {
     }
   }, [status, toastShown]);
 
-  const LoaderScreenJSX = useMemo(() => (
-    <div className="w-full max-h-screen flex items-center justify-center dark ">
-      <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
-        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
-          <Image
-            src={"/meteorite.gif"}
-            width={500}
-            height={500}
-            alt="loading"
-            draggable={false}
-            className="w-24 h-24 object-cover "
-            priority
-            unoptimized
-          />
-          <div className="flex flex-row gap-2 items-center">
-            <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">
-              Loading up your space
-            </p>
-            <Loader strokeWidth={3} className="animate-spin lg:w-5 lg:h-5 w-4 h-4" />
-          </div>
-        </span>
+  const LoaderScreenJSX = useMemo(
+    () => (
+      <div className="w-full max-h-screen flex items-center justify-center dark select-none ">
+        <div
+          className="overflow-hidden w-full h-[100vh] object-cover relative"
+          id="container"
+        >
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
+            <Image
+              src={"/meteorite.gif"}
+              width={500}
+              height={500}
+              alt="loading"
+              draggable={false}
+              className="w-24 h-24 object-cover "
+              priority
+              unoptimized
+            />
+            <div className="flex flex-row gap-2 items-center">
+              <p className="lg:text-lg text-base text-nowrap font-semibold font-base ">
+                Loading up your space
+              </p>
+              <Loader
+                strokeWidth={3}
+                className="animate-spin lg:w-5 lg:h-5 w-4 h-4"
+              />
+            </div>
+          </span>
+        </div>
       </div>
-    </div>
-  ), []);
+    ),
+    []
+  );
 
-  const ContainerViewJSX = useMemo(() => (
-    <div ref={ref} className="w-full h-full overflow-hidden relative" id="container">
-      <div className="overflow-hidden w-full h-[100vh] object-cover relative" id="container">
-        <Videoplayer source={source} />
-      </div>
-      <span className="absolute top-4 right-4 hidden lg:block md:block">
-        <span className="flex flex-row gap-4">
-          <ToggleHide disabled={!user.name} />
-          <FullScreenView />
-        </span>
-      </span>
-      {status === "unauthenticated" && (
-        <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0 bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
-          <SpotifyLoginJSX />
-        </span>
-      )}
-      {status === "authenticated" && !hideSettings && (
-        <span className="absolute bottom-4 left-4">
-          <span className="flex flex-row lg:gap-4 gap-2">
-            <UserProfileJSX />
-            <SettingsJSX />
+  const ContainerViewJSX = useMemo(
+    () => (
+      <div
+        ref={ref}
+        className="w-full h-full overflow-hidden relative"
+        id="container"
+      >
+        <div
+          className="overflow-hidden w-full h-[100vh] object-cover relative"
+          id="container"
+        >
+          <Videoplayer source={source} />
+        </div>
+        <span className="absolute top-4 right-4 hidden lg:block md:block">
+          <span className="flex flex-row gap-4">
+            <ToggleHide disabled={!user.name} />
+            <FullScreenView />
           </span>
         </span>
-      )}
-      <>
-        <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
-          <AudioNoiseControls disabled={!user.name} hide={hideSettings} />
+        {status === "unauthenticated" && (
+          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0 bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
+            <SpotifyLoginJSX />
+          </span>
+        )}
+        {status === "authenticated" && !hideSettings && (
+          <span className="absolute bottom-4 left-4">
+            <span className="flex flex-row lg:gap-4 gap-2">
+              <UserProfileJSX />
+              <SettingsJSX />
+            </span>
+          </span>
+        )}
+        <>
+          <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
+            <AudioNoiseControls disabled={!user.name} hide={hideSettings} />
+          </span>
+          <span className={!user.name || hideSettings ? "hidden" : "block"}>
+            <SpotifyEmbeadJSX
+              playlistLink={
+                currentPlayList?.length > 0
+                  ? currentPlayList
+                  : "https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator"
+              }
+              disabled={!user.name}
+              hideIcon={hideSettings}
+            />
+          </span>
+        </>
+        <span className="absolute top-4 left-4">
+          <ClockCard hide={hideTime} references={ref} />
         </span>
-        <span className={!user.name || hideSettings ? "hidden" : "block"}>
-          <SpotifyEmbeadJSX
-            playlistLink={currentPlayList?.length > 0 ? currentPlayList : "https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator"}
-            disabled={!user.name}
-            hideIcon={hideSettings}
-          />
+        <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
+          <QuoteCard hide={hideQuote} references={ref} />
         </span>
-      </>
-      <span className="absolute top-4 left-4">
-        <ClockCard hide={hideTime} references={ref} />
-      </span>
-      <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
-        <QuoteCard hide={hideQuote} references={ref} />
-      </span>
-      <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
-        <Timer isHidden={hidePomodoroCard} references={ref} />
-      </span>
-      <span className={`absolute ${hideTime || hideQuote ? "top-4" : "bottom-20"} left-4`}>
-        <StickyNotes notes={notes} setNotes={setNotes} containerRef={ref} />
-      </span>
-    </div>
-  ), [source, user.name, currentPlayList, hideTime, hideQuote, hideSettings, status, hidePomodoroCard, notes, setNotes]);
-
-  return (
-    <div className="w-full max-h-screen overflow-hidden relative">
-      {status === "loading" || videoLoading ? LoaderScreenJSX : ContainerViewJSX}
-    </div>
+        <span
+          className={`absolute ${
+            hideTime || hideQuote ? "top-4" : "bottom-20"
+          } left-4`}
+        >
+          <Timer isHidden={hidePomodoroCard} references={ref} />
+        </span>
+        <span
+          className={`absolute ${
+            hideTime || hideQuote ? "top-4" : "bottom-20"
+          } left-4`}
+        >
+          <StickyNotes notes={notes} setNotes={setNotes} containerRef={ref} />
+        </span>
+      </div>
+    ),
+    [
+      source,
+      user.name,
+      currentPlayList,
+      hideTime,
+      hideQuote,
+      hideSettings,
+      status,
+      hidePomodoroCard,
+      notes,
+      setNotes,
+    ]
   );
+
+  const isDesktopResolution = useMatchMediaHook({
+    mediaquery: "(min-width: 1024px)",
+    initValue: true,
+  });
+
+  const isTabletResolution = useMatchMediaHook({
+    mediaquery: "(min-width: 768px)",
+    initValue: true,
+  });
+
+  console.log(isTabletResolution);
+
+  if (isDesktopResolution && isTabletResolution) {
+    return (
+      <div className="w-full max-h-screen overflow-hidden relative">
+        {status === "loading" || videoLoading
+          ? LoaderScreenJSX
+          : ContainerViewJSX}
+      </div>
+    );
+  } else return <RestrictedPage />;
 }
