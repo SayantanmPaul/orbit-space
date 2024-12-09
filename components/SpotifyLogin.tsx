@@ -15,7 +15,7 @@ const SpotifyLoginJSX = () => {
 
     return (
         <HoverCard>
-            <div className="max-w-96 w-full bg-black/40 backdrop-blur-xl shadow-lg dark p-4 text-base z-50 rounded-md borderp-4 text-popover-foreground outline-none
+            <div className="max-w-96 w-full bg-black/40 backdrop-blur-xl shadow-lg dark p-4 text-base z-auto rounded-md borderp-4 text-popover-foreground outline-none
             ">
                 <div className="space-y-4 w-full ">
                     <div className="space-y-2 w-full">

@@ -74,41 +74,6 @@ export default function Page() {
     }
   }, [status, session, setUser]);
 
-  useEffect(() => {
-    if (
-      status === "unauthenticated" &&
-      !toastShown &&
-      !localStorage.getItem("sourceNotification")
-    ) {
-      const toastId = toast(
-        <div className="relative">
-          <div className="fixed inset-0 backdrop-blur bg-[#0A97B0] "></div>
-          <div className="relative flex flex-col gap-2 p-3 text-white z-10">
-            <div className="flex flex-row gap-2 items-center">
-              <p className="text-sm font-semibold font-base select-none">
-                A Short Note
-              </p>
-              <CircleAlert strokeWidth={3} className="w-4 h-4" />
-            </div>
-            <p className="text-[13px] tracking-normal dark select-none">
-              This app does not store your information or uploaded content. Note
-              that your content may reset when the cache is cleared.
-            </p>
-            <button
-              className="w-fit text-black font-semibold font-base text-xs bg-white px-4 py-1 mt-2"
-              onClick={() => toast.dismiss(toastId)}
-            >
-              Okay, got it
-            </button>
-          </div>
-        </div>,
-        { duration: 10000, position: "top-left" }
-      );
-      setToastShown(true);
-      localStorage.setItem("sourceNotification", "true");
-    }
-  }, [status, toastShown]);
-
   const LoaderScreenJSX = useMemo(
     () => (
       <div className="w-full max-h-screen flex items-center justify-center dark select-none ">
@@ -151,7 +116,7 @@ export default function Page() {
         id="container"
       >
         <div
-          className="overflow-hidden w-full h-[100vh] object-cover relative"
+          className="overflow-hidden w-full h-[100vh] object-cover relative -z-10"
           id="container"
         >
           <Videoplayer source={source} />
@@ -197,11 +162,7 @@ export default function Page() {
         <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
           <QuoteCard hide={hideQuote} references={ref} />
         </span>
-        <span
-          className={`absolute ${
-            hideTime || hideQuote ? "top-4" : "bottom-20"
-          } left-4`}
-        >
+        <span className={`absolute bottom-48 left-4`}>
           <Timer isHidden={hidePomodoroCard} references={ref} />
         </span>
         <span
@@ -236,8 +197,6 @@ export default function Page() {
     mediaquery: "(min-width: 768px)",
     initValue: true,
   });
-
-  console.log(isTabletResolution);
 
   if (isDesktopResolution && isTabletResolution) {
     return (
