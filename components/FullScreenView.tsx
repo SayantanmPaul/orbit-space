@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { Maximize, Minimize } from 'lucide-react'
 import {
     Tooltip,
     TooltipContent,
@@ -7,7 +5,8 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import classNames from 'classnames'
-import toast from 'react-hot-toast'
+import { Maximize, Minimize } from 'lucide-react'
+import { useState } from 'react'
 
 const FullScreenView = ({ hide }: { hide?: boolean }) => {
     const [isFullScreen, setIsFullScreen] = useState(false)

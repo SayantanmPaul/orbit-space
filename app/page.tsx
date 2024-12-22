@@ -31,6 +31,7 @@ interface NoteType {
   position?: { x: number; y: number };
 }
 
+//update the source video on first load
 function useInitializeSource(setSource: (source: string) => void) {
   useEffect(() => {
     if (!localStorage.getItem("sourceSet")) {
@@ -70,10 +71,10 @@ export default function Page() {
   }));
 
   const { data: session, status } = useSession();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useInitializeSource(setSource);
 
+  //set user after login
   useEffect(() => {
     if (status === "authenticated" && session) {
       setUser({
@@ -83,6 +84,7 @@ export default function Page() {
     }
   }, [status, session, setUser]);
 
+  //for sticky notes possition
   const determineNewNotePosition = () => {
     const maxX = window.innerWidth - 250;
     const maxY = window.innerHeight - 250;
@@ -93,6 +95,7 @@ export default function Page() {
     };
   };
 
+  //creating and handleing sticky notes
   const handleAddNewStickyNote = useCallback(() => {
     const newNote = {
       id: Date.now(),

@@ -14,6 +14,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "../ui/context-menu";
+import toast from "react-hot-toast";
 
 const Note = ({
   noteId,
@@ -43,11 +44,19 @@ const Note = ({
 
   const handleSaveNote = () => {
     if (noteText.trim() === "") {
-      alert("Note cannot be empty.");
+      toast.error("Note cannot be empty.");
       return;
     }
     editStickyNote(noteId, noteText);
     setIsEditing(false);
+  };
+
+  const handleCancelEdit = () => {
+    if (content.trim() === "" || noteText.trim() === "") {
+      deleteStickyNote(noteId);
+    } else {
+      setIsEditing(false);
+    }
   };
 
   return (
@@ -75,14 +84,15 @@ const Note = ({
           />
           <div className="flex justify-end gap-2">
             <button
-              onClick={() => setIsEditing(false)}
-              className="px-3 py-1 bg-gray-600 rounded-md hover:bg-gray-500"
+              disabled={noteText.trim() === ""}
+              onClick={handleCancelEdit}
+              className="px-3 py-1 bg-gray-600 rounded-md disabled:text-white/50 text-sm"
             >
               Cancel
             </button>
             <button
               onClick={handleSaveNote}
-              className="px-3 py-1 bg-green-600 rounded-md hover:bg-green-500"
+              className="px-3 py-1 bg-green-600 rounded-md hover:bg-green-500 text-sm"
             >
               Save
             </button>
