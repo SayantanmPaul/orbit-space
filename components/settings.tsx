@@ -1,11 +1,19 @@
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { PopoverContent } from '@radix-ui/react-popover'
-import { BookOpen, Clock2, Earth, ListMusic, NotebookPenIcon, Palette, Quote, Settings, Timer } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import { Popover, PopoverTrigger } from './ui/popover'
-import { Toggle } from './ui/toggle'
-import AddNewPlayList from "./AddNewPlayList"
+import { useAppStore } from "@/(store)/App"
+import { ToggleGroup } from "@/components/ui/toggle-group"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { animationClass } from "@/lib/utils"
+import { PopoverContent } from '@radix-ui/react-popover'
+import classNames from "classnames"
+import { BookOpen, Clock2, Earth, ListMusic, Palette, Quote, Settings, Timer } from 'lucide-react'
+import { useRef, useState } from 'react'
+import AddNewPlayList from "./AddNewPlayList"
+import WallpaperSelection from "./BackgroundOptions"
+import ThemeSelectionJSX from "./ThemeSelection"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,17 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "./ui/dropdown-menu"
-import { useAppStore } from "@/(store)/App"
-import WallpaperSelection from "./BackgroundOptions"
-import ThemeSelectionJSX from "./ThemeSelection"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import classNames from "classnames"
-import NoteDialog from "./sticky-notes/NoteDialog"
+import { Popover, PopoverTrigger } from './ui/popover'
+import { Toggle } from './ui/toggle'
 
 const SettingsJSX = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -148,20 +147,6 @@ const SettingsJSX = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {/* sticky notes */}
-              <Popover>
-                <Tooltip>
-                  <TooltipTrigger asChild >
-                  <NoteDialog
-                      isOpen={isNoteDialogOpen}
-                      setIsOpen={setIsNoteDialogOpen}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent className={tooltipClass}>
-                    Add notes
-                  </TooltipContent>
-                </Tooltip>
-              </Popover>
               {/* theme selection popover */}
               <Popover>
                 <Tooltip>

@@ -9,17 +9,27 @@ import RestrictedPage from "@/components/RestrictedPage";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
 import SpotifyLoginJSX from "@/components/SpotifyLogin";
-import StickyNotes from "@/components/sticky-notes/StickyNotes";
+import Note from "@/components/sticky-notes/Note";
 import { ToggleHide } from "@/components/ToggleHideSettings";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
 import UserProfileJSX from "@/components/UserProfile";
 import Videoplayer from "@/components/videoplayer";
 import useMatchMediaHook from "@/hooks/MatchMediaHook";
-import { CircleAlert, Loader } from "lucide-react";
+import { ChevronLeftIcon, Loader, NotebookIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
-import { set } from "zod";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+interface NoteType {
+  id: number;
+  text: string;
+  position?: { x: number; y: number };
+}
 
 function useInitializeSource(setSource: (source: string) => void) {
   useEffect(() => {
@@ -60,8 +70,7 @@ export default function Page() {
   }));
 
   const { data: session, status } = useSession();
-  const [toastShown, setToastShown] = useState(false);
-  const [videoLoading, setVideoLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useInitializeSource(setSource);
 
@@ -73,6 +82,39 @@ export default function Page() {
       });
     }
   }, [status, session, setUser]);
+
+  const determineNewNotePosition = () => {
+    const maxX = window.innerWidth - 250;
+    const maxY = window.innerHeight - 250;
+
+    return {
+      x: Math.floor(Math.random() * maxX),
+      y: Math.floor(Math.random() * maxY),
+    };
+  };
+
+  const handleAddNewStickyNote = useCallback(() => {
+    const newNote = {
+      id: Date.now(),
+      text: "",
+      position: determineNewNotePosition(),
+    };
+    const updatedNotes = [...notes, newNote];
+    setNotes(updatedNotes);
+  }, [notes, setNotes]);
+
+  useEffect(() => {
+    if (notes.length > 0 && notes.length === 0) {
+      setNotes(
+        notes.map((note: NoteType) => {
+          return {
+            ...note,
+            position: note.position || determineNewNotePosition(),
+          };
+        })
+      );
+    }
+  }, [setNotes, notes]);
 
   const LoaderScreenJSX = useMemo(
     () => (
@@ -115,12 +157,46 @@ export default function Page() {
         className="w-full h-full overflow-hidden relative"
         id="container"
       >
-        <div
-          className="overflow-hidden w-full h-[100vh] object-cover relative -z-10"
-          id="container"
-        >
-          <Videoplayer source={source} />
-        </div>
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <div
+              className="overflow-hidden w-full h-[100vh] object-cover relative -z-10"
+              id="container"
+            >
+              <Videoplayer source={source} />
+            </div>
+          </ContextMenuTrigger>
+          {status === "authenticated" && session && (
+            <ContextMenuContent className="w-56 bg-black/50 border-white/10 backdrop-blur text-white ">
+              <ContextMenuItem
+                inset
+                className="focus:bg-white/20 focus:text-white px-0"
+              >
+                <ChevronLeftIcon size={18} strokeWidth={2.2} className="mx-2" />
+                Back
+              </ContextMenuItem>
+              <ContextMenuItem
+                onClick={handleAddNewStickyNote}
+                inset
+                className="focus:bg-white/20 focus:text-white px-0"
+              >
+                <NotebookIcon size={18} strokeWidth={2} className="mx-2" />
+                Add new note
+              </ContextMenuItem>
+            </ContextMenuContent>
+          )}
+        </ContextMenu>
+        {notes.map((note) => {
+          return (
+            <Note
+              noteId={note.id}
+              key={note.id}
+              initPostion={note.position}
+              content={note.text}
+              containerRef={ref}
+            />
+          );
+        })}
         <span className="absolute top-4 right-4 hidden lg:block md:block">
           <span className="flex flex-row gap-4">
             <ToggleHide disabled={!user.name} />
@@ -169,9 +245,7 @@ export default function Page() {
           className={`absolute ${
             hideTime || hideQuote ? "top-4" : "bottom-20"
           } left-4`}
-        >
-          <StickyNotes notes={notes} setNotes={setNotes} containerRef={ref} />
-        </span>
+        ></span>
       </div>
     ),
     [
@@ -184,7 +258,8 @@ export default function Page() {
       status,
       hidePomodoroCard,
       notes,
-      setNotes,
+      handleAddNewStickyNote,
+      session,
     ]
   );
 
@@ -201,9 +276,7 @@ export default function Page() {
   if (isDesktopResolution && isTabletResolution) {
     return (
       <div className="w-full max-h-screen overflow-hidden relative">
-        {status === "loading" || videoLoading
-          ? LoaderScreenJSX
-          : ContainerViewJSX}
+        {status === "loading" ? LoaderScreenJSX : ContainerViewJSX}
       </div>
     );
   } else return <RestrictedPage />;

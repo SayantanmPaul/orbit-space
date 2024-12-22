@@ -7,6 +7,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import classNames from 'classnames'
+import toast from 'react-hot-toast'
 
 const FullScreenView = ({ hide }: { hide?: boolean }) => {
     const [isFullScreen, setIsFullScreen] = useState(false)
