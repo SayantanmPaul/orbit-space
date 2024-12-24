@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SessionProvider from "@/Session/SessionProvider";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
     default: "Orbit-Space",
-    template: "%s: Stay productive always"
+    template: "%s: Stay productive always",
   },
-  description: "Orbit Space: A Lofi music application designed to enhance focus, relaxation. Stay productive always depends on your mood.",
+  description:
+    "Orbit Space: A Lofi music application designed to enhance focus, relaxation. Stay productive always depends on your mood.",
   openGraph: {
     title: "Orbit-Space",
     description:
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
     title: "Orbit-Space",
     description:
       "A Lofi music app designed to help you stay productive, relaxed, and focused—perfect for any mood.",
-    site: "@impaul_p78814", 
+    site: "@impaul_p78814",
     creator: "@impaul_p78814",
     images: [
       {
@@ -66,6 +68,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
