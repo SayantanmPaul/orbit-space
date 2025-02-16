@@ -24,6 +24,7 @@ import { ChevronLeftIcon, Loader, NotebookIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NoteType {
   id: number;
@@ -121,7 +122,14 @@ export default function Page() {
 
   const LoaderScreenJSX = useMemo(
     () => (
-      <div className="w-full max-h-screen flex items-center justify-center dark select-none ">
+      <motion.div
+        key="loader"
+        // initial={{ opacity: 0 }}
+        // animate={{ opacity: 1 }}
+        // exit={{ opacity: 0 }}
+        // transition={{ duration: 0.2 }}
+        className="w-full max-h-screen flex items-center justify-center dark select-none "
+      >
         <div
           className="overflow-hidden w-full h-[100vh] object-cover relative"
           id="container"
@@ -148,22 +156,27 @@ export default function Page() {
             </div>
           </span>
         </div>
-      </div>
+      </motion.div>
     ),
     []
   );
 
   const ContainerViewJSX = useMemo(
     () => (
-      <div
+      <motion.div
+        key="container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full h-full overflow-hidden relative "
         ref={ref}
-        className="w-full h-full overflow-hidden relative"
         id="container"
       >
         <ContextMenu>
           <ContextMenuTrigger>
             <div
-              className="overflow-hidden w-full h-[100vh] object-cover relative -z-10"
+              className="overflow-hidden w-full h-[100vh] object-cover relative -z-10 bg-[#021526]"
               id="container"
             >
               <Videoplayer source={source} />
@@ -249,7 +262,7 @@ export default function Page() {
             hideTime || hideQuote ? "top-4" : "bottom-20"
           } left-4`}
         ></span>
-      </div>
+      </motion.div>
     ),
     [
       source,
@@ -278,8 +291,10 @@ export default function Page() {
 
   if (isDesktopResolution && isTabletResolution) {
     return (
-      <div className="w-full max-h-screen overflow-hidden relative">
-        {status === "loading" ? LoaderScreenJSX : ContainerViewJSX}
+      <div className="w-full max-h-screen overflow-hidden relative ">
+        <AnimatePresence mode="wait">
+          {status === "loading" ? LoaderScreenJSX : ContainerViewJSX}
+        </AnimatePresence>
       </div>
     );
   } else return <RestrictedPage />;
