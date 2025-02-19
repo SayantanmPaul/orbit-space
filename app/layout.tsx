@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SessionProvider from "@/Session/SessionProvider";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
@@ -64,10 +64,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-        <SessionProvider>
-          {children}
-          <Toaster />
-        </SessionProvider>
+        <Toaster position="bottom-right" />
+        <SessionProvider>{children}</SessionProvider>
         <Analytics />
       </body>
     </html>

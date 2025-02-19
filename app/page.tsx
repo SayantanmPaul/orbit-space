@@ -8,7 +8,7 @@ import QuoteCard from "@/components/QuoteCard";
 import RestrictedPage from "@/components/RestrictedPage";
 import SettingsJSX from "@/components/settings";
 import SpotifyEmbeadJSX from "@/components/SpotifyEmbead";
-import SpotifyLoginJSX from "@/components/SpotifyLogin";
+import GoogleLoginJSX from "@/components/GoogleLogin";
 import Note from "@/components/sticky-notes/Note";
 import { ToggleHide } from "@/components/ToggleHideSettings";
 import {
@@ -221,7 +221,7 @@ export default function Page() {
         </span>
         {status === "unauthenticated" && (
           <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0 bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
-            <SpotifyLoginJSX />
+            <GoogleLoginJSX />
           </span>
         )}
         {status === "authenticated" && !hideSettings && (
