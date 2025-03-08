@@ -86,7 +86,7 @@ const WallpaperSelection = () => {
             }
             {video === source &&
               <Image
-                src={'/galaxy.gif'}
+                src={'/space.png'}
                 alt="galaxy"
                 width={50}
                 height={50}
