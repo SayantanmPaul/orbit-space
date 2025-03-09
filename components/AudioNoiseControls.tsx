@@ -141,7 +141,10 @@ const AudioNoiseControls = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <PopoverTrigger>
-                <span className="bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20">
+                <span
+                  aria-label="Sound effect controls"
+                  className="bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20"
+                >
                   <SlidersVertical
                     strokeWidth={2}
                     size={20}
@@ -161,7 +164,10 @@ const AudioNoiseControls = ({
             {/* dynamic player */}
             {audioSource.map((audio, index) => (
               <div key={index} className="flex items-center gap-4 mb-2">
-                <button className=" w-20 flex flex-row justify-between gap-2 items-center">
+                <button
+                  aria-label={audio.name}
+                  className=" w-20 flex flex-row justify-between gap-2 items-center"
+                >
                   <p className="font-base text-xs w-full text-start">
                     {audio.name}
                   </p>
@@ -183,6 +189,7 @@ const AudioNoiseControls = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
+              aria-label="Toggle Play/Pause"
               onClick={togglePlayPause}
               className="bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-black/20"
             >

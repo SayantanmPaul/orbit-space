@@ -225,6 +225,7 @@ const Timer = ({
         />
         <Button
           type="button"
+          aria-label="Toggle Play/Pause"
           style={{ backgroundColor: darkenColor(selectedTimerColor, 0.1) }}
           className={` px-6 py-6 rounded-2xl flex items-center `}
           onClick={handlePlayPause}
@@ -240,7 +241,8 @@ const Timer = ({
             stopTimer();
             switchMode();
           }}
-          className="bg-red-50/10 px-4 py-6 rounded-2xl"
+                  className="bg-red-50/10 px-4 py-6 rounded-2xl"
+                  aria-label="timer-settings"
         >
           <FastForwardIcon className="h-5 w-5 text-red-50" />
         </Button>

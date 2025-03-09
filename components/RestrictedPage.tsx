@@ -5,11 +5,6 @@ const RestrictedPage = () => {
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="flex flex-col gap-6 items-start justify-center px-6 w-full h-fit">
-        <span className="flex gap-2">
-          <p className=" text-2xl font-semibold font-oswald absolute top-4 left-1/2 transform -translate-x-1/2">
-            Orbit Space
-          </p>
-        </span>
         <Image
           src={"/solar-system.gif"}
           alt="Restricted"
@@ -31,11 +26,7 @@ const RestrictedPage = () => {
             Thank you for your understanding.
           </p>
           <p className=" text-xs font-base font-medium">
-            from,{" "}
-            <a href="https://github.com/Sayantanmpaul" className="underline">
-              Devloper
-            </a>{" "}
-            Orbit Space✨
+            from, Creator Orbit Space✨
           </p>
         </div>
       </div>

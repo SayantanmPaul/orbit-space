@@ -42,6 +42,7 @@ const FullScreenView = ({ hide }: { hide?: boolean }) => {
         <TooltipTrigger asChild>
           <button
             onClick={toggleFullScreenView}
+            aria-label="Toggle Full Screen"
             className={`bg-black/20 backdrop-blur-sm rounded-lg group w-12 h-12 flex items-center justify-center cursor-pointer  ${
               hide ? "hidden" : "block"
             }`}

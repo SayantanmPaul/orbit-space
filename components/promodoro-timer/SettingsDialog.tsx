@@ -85,7 +85,10 @@ const SettingsDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-red-50/10 px-4 py-6 rounded-2xl">
+        <Button
+          aria-label="timer-settings"
+          className="bg-red-50/10 px-4 py-6 rounded-2xl"
+        >
           <Settings2Icon className="h-5 w-5 text-red-50" />
         </Button>
       </DialogTrigger>
