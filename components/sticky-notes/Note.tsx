@@ -1,20 +1,14 @@
 import { useAppStore } from "@/(store)/App";
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Textarea } from "../ui/textarea";
-import {
-  ChevronLeftIcon,
-  NotebookIcon,
-  PencilLineIcon,
-  Trash2Icon,
-} from "lucide-react";
+import { ChevronLeftIcon, PencilLineIcon, Trash2Icon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "../ui/context-menu";
-import toast from "react-hot-toast";
 
 const Note = ({
   noteId,
@@ -27,11 +21,25 @@ const Note = ({
   initPostion?: { x: number; y: number };
   containerRef: React.RefObject<HTMLDivElement>;
 }) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
   const { editStickyNote, deleteStickyNote } = useAppStore();
 
   // Local state for managing edit mode and note text
   const [isEditing, setIsEditing] = useState(content.trim() === "");
   const [noteText, setNoteText] = useState(content);
+
+  // auto focus on textarea when editing
+  useEffect(() => {
+    if (isEditing) {
+      const timeoutId = setTimeout(() => {
+        if (ref.current) {
+          ref.current.focus();
+        }
+      }, 10);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isEditing]);
 
   const handleDeleteNote = (e: React.MouseEvent, id: number) => {
     e.preventDefault();
@@ -71,13 +79,13 @@ const Note = ({
         touchAction: "none",
       }}
       onClick={(e) => e.stopPropagation()}
-      className="absolute w-96 border border-white/10 backdrop-blur bg-black/20 s p-3 select-none max-w-full rounded-md text-white flex flex-col cursor-grab"
+      className="absolute w-96 border border-white/10 backdrop-blur bg-black/20 s p-3 select-none max-w-full rounded-md text-white flex flex-col cursor-grab z-10"
     >
       {isEditing ? (
         <div className="flex flex-col gap-2">
           <textarea
             value={noteText}
-            autoFocus={true}
+            ref={ref}
             placeholder="study for 1 hour..."
             onChange={(e) => setNoteText(e.target.value)}
             className="w-full h-32 bg-transparent border border-white/10 p-2 text-white rounded-md focus-visible:ring-0 focus-visible:outline-none focus-visible:border-white/70 font-base"
@@ -108,7 +116,10 @@ const Note = ({
               </p>
             </div>
           </ContextMenuTrigger>
-          <ContextMenuContent className="w-48 bg-black/50 border-white/10 backdrop-blur text-white ">
+          <ContextMenuContent
+            container={containerRef.current}
+            className="w-48 bg-black/50 border-white/10 backdrop-blur text-white "
+          >
             <ContextMenuItem
               inset
               className="focus:bg-white/20 focus:text-white px-0"

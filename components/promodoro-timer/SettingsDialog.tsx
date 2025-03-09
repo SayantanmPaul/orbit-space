@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Settings2Icon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -16,9 +16,11 @@ import { Label } from "../ui/label";
 const SettingsDialog = ({
   stopTimer,
   timerMode,
+  containerRef,
 }: {
   stopTimer: () => void;
   timerMode: "pomodoro" | "shortBreak" | "longBreak";
+  containerRef: React.RefObject<HTMLDivElement>;
 }) => {
   const {
     pomodoroTime,
@@ -87,7 +89,10 @@ const SettingsDialog = ({
           <Settings2Icon className="h-5 w-5 text-red-50" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black/30 backdrop-blur-lg border border-white/10 text-white max-w-md">
+      <DialogContent
+        container={containerRef.current}
+        className="bg-black/30 backdrop-blur-lg border border-white/10 text-white max-w-md"
+      >
         <DialogHeader>
           <DialogTitle className="font-base">Settings</DialogTitle>
           <DialogDescription></DialogDescription>

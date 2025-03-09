@@ -131,157 +131,149 @@ export default function Page() {
 
   const LoaderScreenJSX = useMemo(
     () => (
-      <AnimatePresence mode="popLayout">
-        {!isVisible && (
-          <motion.div
-            key="loader"
-            className="w-full max-h-screen flex items-center justify-center dark select-none "
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div
-              className="overflow-hidden w-full h-[100vh] object-cover relative"
-              id="container"
-            >
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
-                <Image
-                  src={"/solar-system.gif"}
-                  width={500}
-                  height={500}
-                  alt="loading"
-                  draggable={false}
-                  className="w-20 h-20 object-cover "
-                  priority
-                  unoptimized
-                />
-                <div className="flex flex-row gap-2 items-center">
-                  <p className="text-base text-nowrap font-[10px] font-mono tracking-tight animate-pulse">
-                    Creating your personal space //_
-                  </p>
-                </div>
-              </span>
+      <motion.div
+        key="loader"
+        className="w-full max-h-screen flex items-center justify-center dark select-none "
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div
+          className="overflow-hidden w-full h-[100vh] object-cover relative"
+          id="container"
+        >
+          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-4 flex-col ">
+            <Image
+              src={"/solar-system.gif"}
+              width={500}
+              height={500}
+              alt="loading"
+              draggable={false}
+              className="w-20 h-20 object-cover "
+              priority
+              unoptimized
+            />
+            <div className="flex flex-row gap-2 items-center">
+              <p className="text-base text-nowrap font-[10px] font-mono tracking-tight animate-pulse">
+                Creating your personal space //_
+              </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </span>
+        </div>
+      </motion.div>
     ),
-    [isVisible]
+    []
   );
 
   const ContainerViewJSX = useMemo(
     () => (
-      <AnimatePresence mode="popLayout">
-        {isVisible && (
-          <motion.div
-            key="container"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full h-full overflow-hidden relative "
-            ref={ref}
-            id="container"
-          >
-            <ContextMenu>
-              <ContextMenuTrigger>
-                <div
-                  className="overflow-hidden w-full h-[100vh] object-cover relative -z-10 "
-                  id="container"
-                >
-                  <Videoplayer source={source} />
-                </div>
-              </ContextMenuTrigger>
-              {status === "authenticated" && session && (
-                <ContextMenuContent className="w-56 bg-black/50 border-white/10 backdrop-blur text-white ">
-                  <ContextMenuItem
-                    inset
-                    className="focus:bg-white/20 focus:text-white px-0"
-                  >
-                    <ChevronLeftIcon
-                      size={18}
-                      strokeWidth={2.2}
-                      className="mx-2"
-                    />
-                    Back
-                  </ContextMenuItem>
-                  <ContextMenuItem
-                    onClick={handleAddNewStickyNote}
-                    inset
-                    className="focus:bg-white/20 focus:text-white px-0"
-                  >
-                    <NotebookIcon size={18} strokeWidth={2} className="mx-2" />
-                    Add new note
-                  </ContextMenuItem>
-                </ContextMenuContent>
-              )}
-            </ContextMenu>
-            {notes.map((note) => {
-              return (
-                <Note
-                  noteId={note.id}
-                  key={note.id}
-                  initPostion={note.position}
-                  content={note.text}
-                  containerRef={ref}
-                />
-              );
-            })}
-            <span className="absolute top-4 right-4 hidden lg:block md:block">
-              <span className="flex flex-row gap-4">
-                <ToggleHide disabled={!user.name} />
-                <FullScreenView />
-              </span>
-            </span>
-            {status === "unauthenticated" && (
-              <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0 bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
-                <GoogleLoginJSX />
-              </span>
-            )}
-            {status === "authenticated" && !hideSettings && (
-              <span className="absolute bottom-4 left-4">
-                <span className="flex flex-row lg:gap-4 gap-2">
-                  <UserProfileJSX />
-                  <SettingsJSX />
-                </span>
-              </span>
-            )}
-            <>
-              <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
-                <AudioNoiseControls disabled={!user.name} hide={hideSettings} />
-              </span>
-              <span className={!user.name || hideSettings ? "hidden" : "block"}>
-                <SpotifyEmbeadJSX
-                  playlistLink={
-                    currentPlayList?.length > 0
-                      ? currentPlayList
-                      : "https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator"
-                  }
-                  disabled={!user.name}
-                  hideIcon={hideSettings}
-                />
-              </span>
-            </>
-            <span className="absolute top-4 left-4">
-              <ClockCard hide={hideTime} references={ref} />
-            </span>
-            <span
-              className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}
+      <motion.div
+        key="container"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full h-full overflow-hidden relative "
+        ref={ref}
+        id="container"
+      >
+        <ContextMenu>
+          <ContextMenuTrigger>
+            <div
+              className="overflow-hidden w-full h-[100vh] object-cover relative -z-10 "
+              id="container"
             >
-              <QuoteCard hide={hideQuote} references={ref} />
-            </span>
-            <span className={`absolute bottom-48 left-4`}>
-              <Timer isHidden={hidePomodoroCard} references={ref} />
-            </span>
-            <span
-              className={`absolute ${
-                hideTime || hideQuote ? "top-4" : "bottom-20"
-              } left-4`}
-            ></span>
-          </motion.div>
+              <Videoplayer source={source} />
+            </div>
+          </ContextMenuTrigger>
+          {status === "authenticated" && session && (
+            <ContextMenuContent
+              container={ref.current}
+              className="w-56 bg-black/50 border-white/10 backdrop-blur text-white"
+            >
+              <ContextMenuItem
+                inset
+                className="focus:bg-white/20 focus:text-white px-0"
+              >
+                <ChevronLeftIcon size={18} strokeWidth={2.2} className="mx-2" />
+                Back
+              </ContextMenuItem>
+              <ContextMenuItem
+                onClick={handleAddNewStickyNote}
+                inset
+                className="focus:bg-white/20 focus:text-white px-0"
+              >
+                <NotebookIcon size={18} strokeWidth={2} className="mx-2" />
+                Add new note
+              </ContextMenuItem>
+            </ContextMenuContent>
+          )}
+        </ContextMenu>
+        {notes.map((note) => {
+          return (
+            <Note
+              noteId={note.id}
+              key={note.id}
+              initPostion={note.position}
+              content={note.text}
+              containerRef={ref}
+            />
+          );
+        })}
+        <span className="absolute top-4 right-4 hidden lg:block md:block">
+          <span className="flex flex-row gap-4">
+            <ToggleHide disabled={!user.name} />
+            <FullScreenView />
+          </span>
+        </span>
+        {status === "unauthenticated" && (
+          <span className="absolute lg:bottom-4 lg:left-4 md:right-4 lg:-translate-x-0 bottom-4 left-1/2 transform -translate-x-1/2 w-full px-4 lg:px-0">
+            <GoogleLoginJSX />
+          </span>
         )}
-      </AnimatePresence>
+        {status === "authenticated" && !hideSettings && (
+          <span className="absolute bottom-4 left-4">
+            <span className="flex flex-row lg:gap-4 gap-2">
+              <UserProfileJSX containerRef={ref} />
+              <SettingsJSX />
+            </span>
+          </span>
+        )}
+        <>
+          <span className="absolute right-4 top-4 lg:top-auto lg:bottom-4 lg:right-4">
+            <AudioNoiseControls
+              hide={hideSettings}
+              containerRef={ref}
+            />
+          </span>
+          <span className={!user.name || hideSettings ? "hidden" : "block"}>
+            <SpotifyEmbeadJSX
+              playlistLink={
+                currentPlayList?.length > 0
+                  ? currentPlayList
+                  : "https://open.spotify.com/embed/playlist/0iepisLXvVe5RxB3owHjlj?utm_source=generator"
+              }
+              disabled={!user.name}
+              hideIcon={hideSettings}
+            />
+          </span>
+        </>
+        <span className="absolute top-4 left-4">
+          <ClockCard hide={hideTime} references={ref} />
+        </span>
+        <span className={`absolute left-4 ${hideTime ? "top-4" : "top-48"}`}>
+          <QuoteCard hide={hideQuote} references={ref} />
+        </span>
+        <span className={`absolute bottom-48 left-4`}>
+          <Timer isHidden={hidePomodoroCard} references={ref} />
+        </span>
+        <span
+          className={`absolute ${
+            hideTime || hideQuote ? "top-4" : "bottom-20"
+          } left-4`}
+        ></span>
+      </motion.div>
     ),
     [
       source,
@@ -295,7 +287,6 @@ export default function Page() {
       notes,
       handleAddNewStickyNote,
       session,
-      isVisible,
     ]
   );
 
@@ -312,7 +303,18 @@ export default function Page() {
   if (isDesktopResolution && isTabletResolution) {
     return (
       <div className="w-full max-h-screen overflow-hidden relative ">
-        {status === "loading" ? LoaderScreenJSX : ContainerViewJSX}
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {status === "loading" && !isVisible
+              ? LoaderScreenJSX
+              : ContainerViewJSX}
+          </motion.div>
+        </AnimatePresence>
       </div>
     );
   } else return <RestrictedPage />;
